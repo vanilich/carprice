@@ -1,0 +1,30 @@
+.table-shop-title {
+    width: 120px;
+    display: block;
+    font-size: 13px;
+}
+
+.main-table-container {
+	height: 70vh;
+}
+
+.price-item {
+	width: 100%;
+	text-align: center;
+}
+
+.price-item a {
+	display: block;
+	font-size: 17px;
+}
+
+.checkbox-item {
+	display: inline-block;
+	margin-right: 20px;
+	margin-bottom: 5px;
+	float: left;
+}
+
+.form-control {
+	border-radius: 0px;
+}
