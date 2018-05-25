@@ -52,6 +52,10 @@
 		* Удаление цены
 		**/
 		public function remove(Request $request, Response $response, array $args) {
-			// TODO	
+			$id = intval($request->getAttribute('id'));
+
+			$this->container->db->query('DELETE FROM price WHERE id=?i', $id);
+
+		    return $response->withRedirect('/');	
 		}			
 	}

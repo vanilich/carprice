@@ -128,7 +128,7 @@
                             </div>
 
                             <div class="form-group text-right">
-                                <!-- <a href="" class="btn btn-danger">Удалить</a>-->
+                                <a href="" class="btn btn-danger js-delete-price" onclick="return confirm('Вы действильно хотите удалить эту цену?');">Удалить</a>
                                 <button type="submit" class="btn btn-success">Сохранить</button>
                             </div>
                         </form>
@@ -348,15 +348,17 @@
                 $('#myModal2').on('shown.bs.modal', function (event) {
                     var a = $(event.relatedTarget);
 
-                    var parent_template = a.data('parent-template')
-                    var url = a.data('url')
-                    var id = a.data('id')
-                    var template = a.data('template')
+                    var parent_template = a.data('parent-template');
+                    var url = a.data('url');
+                    var id = a.data('id');
+                    var template = a.data('template');
+                    var href = a.data('remove-url');
 
                     $('.js-show-price-form').find('input[name="parent_template"]').val(parent_template);
                     $('.js-show-price-form').find('input[name="url"]').val(url);
                     $('.js-show-price-form').find('input[name="id"]').val(id);
                     $('.js-show-price-form').find('input[name="template"]').val(template);
+                    $('.js-show-price-form').find('.js-delete-price').attr('href', href);
                 }); 
             })();            
         </script>

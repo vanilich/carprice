@@ -40,4 +40,4 @@
 	// Работа с ценами
 	$app->post('/price/add', 		\PriceController::class . ':add')->add( new AuthMiddleware() );
 	$app->post('/price/edit', 		\PriceController::class . ':edit')->add( new AuthMiddleware() );
-	//$app->get('/price/remove/{id}', \PriceController::class . ':remove');
+	$app->get('/price/remove/{id}', \PriceController::class . ':remove');
