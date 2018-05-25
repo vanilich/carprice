@@ -17,10 +17,10 @@ return [
         ],
 
         'db' => [
-            'host'  => '127.0.0.1',
-            'user'  => 'root',
-            'pass'  => '',
-            'db'    => 'lol',
+            'host'  => getenv('MYSQL_HOST'),
+            'user'  => getenv('MYSQL_USER'),
+            'pass'  => getenv('MYSQL_PASS'),
+            'db'    => getenv('MYSQL_DATABASE')
         ],
 
         'auth' => [
