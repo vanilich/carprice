@@ -22,6 +22,8 @@
 		foreach ($data as $key => $value) {
 			putenv("$key=$value");
 		}
+	} else {
+		throw new RuntimeException("Cannot find '.env' file");
 	}
 
 	$settings = require __DIR__ . '/../src/settings.php';
