@@ -30,6 +30,11 @@ return [
 
     ],
     'commands' => [
-        'RefreshPriceTask' => \RefreshPriceTask::class
+        // Обновление цены на сайте
+        'RefreshPriceTask' => \RefreshPriceTask::class,
+
+        // Работа с миграциями базы данных
+        'MigrationUpTask' => \MigrationUpTask::class,
+        'MigrationDownTask' => \MigrationDownTask::class
     ],    
 ];
