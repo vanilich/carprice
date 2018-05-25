@@ -7,9 +7,9 @@
 ```
 1. git clone https://github.com/vanilich/carprice.git
 2. php composer.phar update
-2. Создаем .env файл в корневой директории проекта
-3. Создаем дамп бд: php index.php ExecuteSQLTask.php up
-4. НАполняем его данными: php index.php ExecuteSQLTask.php data
+3. Создаем .env файл в корневой директории проекта
+4. Создаем дамп бд: php index.php ExecuteSQLTask.php up
+5. НАполняем его данными: php index.php ExecuteSQLTask.php data
 ```
 
 ### Пример .env файла
