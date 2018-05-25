@@ -26,7 +26,7 @@
                         <?php foreach($city as $item) { ?>
                             <li>
                                 <?php echo $item['name']; ?>
-                                <a href="/city/remove/<?php echo $item['id']; ?>">
+                                <a href="/city/remove/<?php echo $item['id']; ?>" onclick="return confirm('Вы действильно хотите удалить этот город?');">
                                     <i class="far fa-trash-alt"></i>
                                 </a>
                             </li>  

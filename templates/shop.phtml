@@ -26,7 +26,7 @@
                         <?php foreach($shop as $item) { ?>
                             <li>
                                 <?php echo $item['name']; ?>
-                                <a href="/shop/remove/<?php echo $item['id']; ?>">
+                                <a href="/shop/remove/<?php echo $item['id']; ?>" onclick="return confirm('Вы действильно хотите удалить этот автосалон?');">
                                     <i class="far fa-trash-alt"></i>
                                 </a>
                             </li>  

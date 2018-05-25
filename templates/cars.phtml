@@ -54,7 +54,7 @@
                                     <h4 class="panel-title">
                                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#tab<?php echo $item[0]['mark_id']; ?>">
                                             <?php echo $item[0]['mark_name']; ?>
-                                            <a href="/mark/remove/<?php echo $item[0]['mark_id']; ?>">
+                                            <a href="/mark/remove/<?php echo $item[0]['mark_id']; ?>" onclick="return confirm('Вы действильно хотите удалить эту марку автомобиля?');">
                                                 <i class="far fa-trash-alt"></i>
                                             </a>                                                        
                                             <a data-toggle="modal" 
@@ -73,7 +73,7 @@
                                             <?php foreach($item as $value) { ?>
                                                 <li>
                                                     <?php echo $value['model_name']; ?>
-                                                    <a href="/model/remove/<?php echo $value['model_id']; ?>">
+                                                    <a href="/model/remove/<?php echo $value['model_id']; ?>" onclick="return confirm('Вы действильно хотите удалить эту модель автомобиля?');">
                                                         <i class="far fa-trash-alt"></i>
                                                     </a>                                                        
                                                     <a data-toggle="modal" 
