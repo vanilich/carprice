@@ -1,43 +1,47 @@
 <?php
-	// Главная страница
-	$app->get('/', 		\MainController::class . ':index')->add( new AuthMiddleware() );
-	// Список моделей и марок автомобилей
-	$app->get('/cars', 	\MainController::class . ':cars')->add( new AuthMiddleware() );
-	// Страница с автосалонами
-	$app->get('/shop', 	\MainController::class . ':shop')->add( new AuthMiddleware() );
-
 	// Авторизация
 	$app->get('/login', 	\LoginController::class . ':login');
 	$app->post('/login', 	\LoginController::class . ':doLogin');
 	$app->any('/logout', 	\LoginController::class . ':logout');
 
-	// Вывод таблицы с ценами
-	$app->any('/table',	\TableController::class . ':table')->add( new AuthMiddleware() );
-	// Выгрузка в Excel
-	$app->any('/excel',	\TableController::class . ':excel')->add( new AuthMiddleware() );
 
-	// Работа с моделями автомобилей
-	$app->get('/model/{id}', 		\ModelController::class . ':get')->add( new AuthMiddleware() );
-	$app->post('/model/add', 		\ModelController::class . ':add')->add( new AuthMiddleware() );
-	$app->post('/model/edit', 		\ModelController::class . ':edit')->add( new AuthMiddleware() );
-	$app->get('/model/remove/{id}', \ModelController::class . ':remove')->add( new AuthMiddleware() );
+	$app->group('', function() {
+		// Главная страница
+		$this->get('/', 		\MainController::class . ':index');
+		// Список моделей и марок автомобилей
+		$this->get('/cars', 	\MainController::class . ':cars');
+		// Страница с автосалонами
+		$this->get('/shop', 	\MainController::class . ':shop');
 
-	// Работа с городами
-	$app->get('/city', 				\CityController::class . ':all')->add( new AuthMiddleware() );
-	$app->get('/city/remove/{id}', 	\CityController::class . ':remove')->add( new AuthMiddleware() );
-	$app->post('/city/add', 		\CityController::class . ':add')->add( new AuthMiddleware() );
+		// Вывод таблицы с ценами
+		$this->any('/table',	\TableController::class . ':table');
+		// Выгрузка в Excel
+		$this->any('/excel',	\TableController::class . ':excel');
 
-	// Работа с марками автомобилей
-	$app->post('/mark/add', 		\MarkController::class . ':add')->add( new AuthMiddleware() );
-	$app->post('/mark/edit', 		\MarkController::class . ':edit')->add( new AuthMiddleware() );
-	$app->get('/mark/remove/{id}', 	\MarkController::class . ':remove')->add( new AuthMiddleware() );
+		// Работа с моделями автомобилей
+		$this->get('/model/{id}', 		 \ModelController::class . ':get');
+		$this->post('/model/add', 		 \ModelController::class . ':add');
+		$this->post('/model/edit', 		 \ModelController::class . ':edit');
+		$this->get('/model/remove/{id}', \ModelController::class . ':remove');
 
-	// Работа с автосалонами
-	$app->post('/shop/add', 		\ShopController::class . ':add')->add( new AuthMiddleware() );
-	$app->get('/shop/remove/{id}', 	\ShopController::class . ':remove')->add( new AuthMiddleware() );
-	$app->get('/shop/info/{id}', 	\ShopController::class . ':info')->add( new AuthMiddleware() );
+		// Работа с городами
+		$this->get('/city', 				\CityController::class . ':all');
+		$this->get('/city/remove/{id}', 	\CityController::class . ':remove');
+		$this->post('/city/add', 		\CityController::class . ':add');
 
-	// Работа с ценами
-	$app->post('/price/add', 		\PriceController::class . ':add')->add( new AuthMiddleware() );
-	$app->post('/price/edit', 		\PriceController::class . ':edit')->add( new AuthMiddleware() );
-	$app->get('/price/remove/{id}', \PriceController::class . ':remove')->add( new AuthMiddleware() );
+		// Работа с марками автомобилей
+		$this->post('/mark/add', 		\MarkController::class . ':add');
+		$this->post('/mark/edit', 		\MarkController::class . ':edit');
+		$this->get('/mark/remove/{id}', \MarkController::class . ':remove');
+
+		// Работа с автосалонами
+		$this->post('/shop/add', 		\ShopController::class . ':add');
+		$this->get('/shop/remove/{id}', \ShopController::class . ':remove');
+		$this->get('/shop/info/{id}', 	\ShopController::class . ':info');
+
+		// Работа с ценами
+		$this->post('/price/add', 		 \PriceController::class . ':add');
+		$this->post('/price/edit', 		 \PriceController::class . ':edit');
+		$this->get('/price/remove/{id}', \PriceController::class . ':remove');
+
+	})->add( new AuthMiddleware() );
