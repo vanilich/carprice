@@ -9,6 +9,7 @@
 		* В основной вызываем с главной страницы с помощью Ajax
 		**/
 		public function table(Request $request, Response $response, array $args) {
+			// Получаем данные от клиента
 			$body = $request->getParsedBody();
 
 			// Марка автомобиля
@@ -20,55 +21,13 @@
 			// Города
 			$city =  isset($body['city']) ? $body['city'] : [];
 
-			// ------------------------------------------------
-		    $query = "";
-		    $query .= "SELECT ";
-		    $query .= " 	model.id as 'model_id', ";
-		    $query .= " 	model.name as 'model_name', ";
-		    $query .= " 	mark.name as 'mark_name' ";
-		    $query .= "FROM model  ";
-		    $query .= "		INNER JOIN mark ON model.mark_id = mark.id";
-
-		    // Фильтруем данные по "марке" и "модели" автомобиля
-		    if( isset($mark) AND !empty($mark) AND $mark !== 0 ) {
-		    	$query .= $this->container->db->parse(" AND model.mark_id = ?i", $mark);
-		    }
-		    if( isset($model) AND !empty($model) AND $model !== 0 ) {
-		    	$query .= $this->container->db->parse(" AND model.id = ?i", $model);
-		    }
-
-		    $cars  = $this->container->db->getAll($query);
-		    // ------------------------------------------------
-
-		    $price = $this->container->db->getAll("SELECT price.*, shop.template as 'parent_template' FROM price INNER JOIN shop ON shop.id=price.shop_id;");
-		    $mark = $this->container->db->getAll('SELECT * FROM mark;');
-
-		    // ------------------------------------------------
-
-		    // ------------------------------------------------
-		    $query = "SELECT id as 'shop_id', name FROM shop WHERE 1";
-
-		    // Фильтруем данные по "городу" и "автосалону"
-		    if( isset($shop) AND !empty($shop) AND is_array($shop) ) {
-		    	$query .= $this->container->db->parse(" AND id IN(?a)", $shop);
-		    }
-		    if( isset($city) AND !empty($city) AND is_array($city) ) {
-		    	$query .= $this->container->db->parse(" AND city_id IN(?a)", $city);
-		    }
-
-		    $query .= " ORDER by name DESC;";
-		    $shop  = $this->container->db->getAll($query);
-		    // ------------------------------------------------
-
-		    // Собираем таблицу с данными
-		    $data = $this->builtTable($cars, $price, $shop);
+			// Создаем модель
+		    $priceModel = new PriceModel($this->container->db);
+		    // Генерируем таблицу
+		    $data = $priceModel->getTable($mark, $model, $shop, $city);
 
 		    // И отдаем клиенту...
-		    return $this->container->renderer->render($response, 'table.phtml', [
-		    	'data' => $data,
-		    	'shop' => $shop,
-		    	'mark' => $mark
-		    ]);
+		    return $this->container->renderer->render($response, 'table.phtml', $data);
 		}
 
 		/**
@@ -123,35 +82,4 @@
 			$objWriter->save('php://output');
 		}
 
-		// TODO Model
-		public function builtTable($cars, $price, $shop) {
-		    $data = [];
-
-		    foreach ($cars as $key => $value) {
-		    	$data[] = $value;
-
-		    	$tmp = array_pop($data);
-		    	$tmp['shop'] = $shop;
-
-		    	array_push($data, $tmp);
-		    }
-
-		    foreach ($price as $priceKey => $priceValue) {
-		    	$modelId = $priceValue['model_id'];
-		    	$shopId = $priceValue['shop_id'];
-
-		    	foreach ($data as $modelKey => $modelValue) {
-		    		if( $modelValue['model_id'] === $modelId ) {
-		    			foreach ($modelValue['shop'] as $shopKey => $shopValue) {
-		    				if( $shopValue['shop_id'] === $shopId ) {
-		    					$data[$modelKey]['shop'][$shopKey]['price'] = $priceValue;
-		    				}
-		    			}
-		    			break;
-		    		}
-		    	}
-		    }
-
-		    return $data;
-		}
 	}
