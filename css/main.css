@@ -28,3 +28,9 @@
 .form-control {
 	border-radius: 0px;
 }
+
+.new-price-modal {
+    float: left;
+    line-height: 30px;
+    padding-left: 10px;	
+}

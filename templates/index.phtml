@@ -128,6 +128,13 @@
                             </div>
 
                             <div class="form-group text-right">
+                                <button class="btn btn-primary js-refresh-price" style="float: left;">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                                <p class="new-price-modal" style="display: none;">
+                                    Цена: <span class="price"></span>
+                                </p>
+
                                 <a href="" class="btn btn-danger js-delete-price" onclick="return confirm('Вы действильно хотите удалить эту цену?');">Удалить</a>
                                 <button type="submit" class="btn btn-success">Сохранить</button>
                             </div>
@@ -360,6 +367,29 @@
                     $('.js-show-price-form').find('input[name="template"]').val(template);
                     $('.js-show-price-form').find('.js-delete-price').attr('href', href);
                 }); 
+
+                $('.js-refresh-price').click(function(event) {
+                    event.preventDefault();
+
+                    var id = $('.js-show-price-form').find('input[name="id"]').val();
+                    var url = $('.js-show-price-form').find('input[name="url"]').val();
+                    var template = $('.js-show-price-form').find('input[name="template"]').val();
+
+                    console.log(id, url, template);
+
+                    $.ajax({
+                        method: 'POST',
+                        url: 'price/test',
+                        data: {
+                            id: id,
+                            url: url,
+                            template: template
+                        },
+                        success: function(data) {
+                            
+                        }
+                    })
+                });
             })();            
         </script>
     </body>

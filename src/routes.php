@@ -25,8 +25,8 @@
 		$this->get('/model/remove/{id}', \ModelController::class . ':remove');
 
 		// Работа с городами
-		$this->get('/city', 				\CityController::class . ':all');
-		$this->get('/city/remove/{id}', 	\CityController::class . ':remove');
+		$this->get('/city', 			\CityController::class . ':all');
+		$this->get('/city/remove/{id}', \CityController::class . ':remove');
 		$this->post('/city/add', 		\CityController::class . ':add');
 
 		// Работа с марками автомобилей
@@ -43,5 +43,6 @@
 		$this->post('/price/add', 		 \PriceController::class . ':add');
 		$this->post('/price/edit', 		 \PriceController::class . ':edit');
 		$this->get('/price/remove/{id}', \PriceController::class . ':remove');
+		$this->post('/price/test', 		 \PriceController::class . ':test');
 
 	})->add( new AuthMiddleware() );

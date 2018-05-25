@@ -1,4 +1,7 @@
 <?php
+    use \Interop\Container\ContainerInterface;
+    use \Sunra\PhpSimple\HtmlDomParser;
+
 	class PriceModel extends BaseModel {
 
 		/**
@@ -53,6 +56,31 @@
 		**/
 		public function getPriceWithParentShopTempalte() {
 			return $this->db->getAll("SELECT price.*, shop.template as 'parent_template' FROM price INNER JOIN shop ON shop.id=price.shop_id;");
+		}
+
+
+		/**
+		* Парсим цену с стороннего сайта
+		**/
+		public static function parse($url, $template) {
+			// Проверяем ссылку на доступность
+			if( Helper::check404($url) !== 404 AND Helper::check404($url) !== 0 ) { 
+				$dom = HtmlDomParser::str_get_html( @file_get_contents($url) );
+
+				if($dom) {
+					// Парсим цену с помощью шаблона
+					$price = @$dom->find($template, 0)->innertext;
+
+					if($price) {
+                        // Удаляем из цены html тэги и оставляем только цифры
+                        $price = strip_tags($price);
+                        $price = preg_replace("/[^0-9]/", '', $price);
+
+                        return $price;
+                    }
+				}
+			}
+			return false;
 		}
 
 		/**
