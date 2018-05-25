@@ -1,6 +1,6 @@
 <?php
     /**
-    * Выгружаем дамп бд на сервер
+    * Выполение призвольного SQL кода на сервере
     **/
     class ExecuteSQLTask extends BaseTask {
 
