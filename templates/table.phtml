@@ -1,0 +1,82 @@
+<div class="table-responsive main-table-container">
+    <table class="table table-striped table-hover">
+       <thead>
+            <tr>
+                <th>
+                    <div class="table-shop-title">
+                        Марка
+                    </div>
+                </th>
+                <th>
+                    <div class="table-shop-title">
+                        Модель
+                    </div>
+                </th>
+                <?php foreach($shop as $value) { ?>
+                    <th>
+                        <div class="table-shop-title">
+                            <?php echo $value['name']; ?>
+                        </div>
+                    </th>
+                <?php } ?>
+            </tr>
+       </thead>
+       <tbody>
+             <?php 
+                foreach ($data as $key => $value) {
+                    ?>
+                        <tr>
+                            <td><?php echo $value['mark_name']; ?></td>
+                            <td><?php echo $value['model_name']; ?></td>
+
+                            <?php foreach($value['shop'] as $value) { ?>
+                                <?php if( isset($value['price']) ) { ?>
+                                    <?php if( !empty($value['price']['price']) AND $value['price']['price'] != 0 ) { ?>
+                                        <td style="background-color: #abffab;">
+                                            <div class="price-item">
+                                                <a href="#" 
+                                                data-url="<?php echo $value['price']['url']; ?>" 
+                                                data-parent-template="<?php echo $value['price']['parent_template']; ?>"
+                                                data-template="<?php echo $value['price']['template']; ?>" 
+                                                data-id="<?php echo $value['price']['id']; ?>" 
+                                                data-toggle="modal" 
+                                                data-target="#myModal2"
+                                                >
+                                                    <?php echo number_format($value['price']['price'], 0, '', ' '); ?>
+                                                </a>
+                                                <span class="updated-at">
+                                                    <small><?php echo substr( $value['price']['updated_at'], 0, strpos($value['price']['updated_at'], ' ') ); ?></small>
+                                                </span>
+                                            </div>
+                                        </td>           
+                                    <?php } else { ?>
+                                        <td style="background-color: #fbd736;">
+                                            <div class="price-item">
+                                                <a href="#" 
+                                                data-url="<?php echo $value['price']['url']; ?>" 
+                                                data-parent-template="<?php echo $value['price']['parent_template']; ?>"
+                                                data-template="<?php echo $value['price']['template']; ?>" 
+                                                data-id="<?php echo $value['price']['id']; ?>" 
+                                                data-toggle="modal" 
+                                                data-target="#myModal2"
+                                                >
+                                                    Нет данных
+                                                </a>
+                                            </div>
+                                        </td>
+                                    <?php } ?>
+                                <?php } else { ?>
+                                    <td>
+                                        <div class="price-item">
+                                            -
+                                        </div>
+                                    </td>
+                                <?php } ?>
+                            <?php } ?>                                   
+                        </tr>
+                    <?php
+                }
+            ?>              
+       </tbody>
+    </table>
+</div>

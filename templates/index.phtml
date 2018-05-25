@@ -4,7 +4,361 @@
         <?php echo $this->fetch('head.phtml'); ?>
     </head>
     <body>
-        
+        <?php echo $this->fetch('navbar.phtml'); ?>
+
+
+        <div class="container-fluid">
+            <legend><h1>Цены на автомобили</h1></legend>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Марка</label>
+                        <select class="form-control js-select-mark">
+                            <option value="0">Любая</option>
+                            <?php foreach($mark as $value) { ?>
+                                <option value="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Модель</label>
+                        <select class="form-control js-select-model">
+                            <option value="0">Любая</option>
+                        </select>
+                    </div>
+                </div>                
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Магазин</label>
+                        <br/>
+
+                        <div class="btn-group" data-toggle="buttons">
+                            <?php foreach($shop as $value) { ?>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="shop" value="<?php echo $value['shop_id']; ?>"> <?php echo $value['name']; ?>
+                                </div>
+                            <?php } ?>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Город</label>
+                        <br/>
+
+                        <div class="btn-group" data-toggle="buttons">
+                            <?php foreach($city as $value) { ?>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="city" value="<?php echo $value['id']; ?>"> <?php echo $value['name']; ?>
+                                </div>                                                    
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-success btn-lg js-apply">
+                        <i class="fas fa-sync fa-spin" style="display: none;"></i> Применить фильтр
+                    </button>
+                    <button type="button" class="btn btn-default btn-lg js-reset">
+                        Сбросить фильтр
+                    </button>                    
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal1">
+                        <i class="fas fa-plus"></i>
+                         Добавить ссылку на цену
+                    </button>
+                </div>
+                <div class="col-md-6 text-right">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal1">
+                        <i class="far fa-file-excel"></i>
+                         Выгрузка в Excel
+                    </button>
+                </div>                
+            </div>
+
+            <br/>
+
+            <div class="js-table-container">
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Просмотр ссылки на цену</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/price/edit" class="js-show-price-form">
+                            <input type="hidden" name="id" value="">
+
+                            <div class="form-group">
+                                <label>Шаблон из автосалона</label>
+                                <input type="text" class="form-control" disabled name="parent_template">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ссылка</label>
+                                <input type="text" class="form-control" name="url">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Шаблон <small>(если поле не заполнено, то шаблон берется из поля "Шаблон из автосалона")</small></label>
+                                <input type="text" class="form-control" name="template">
+                            </div>
+
+                            <div class="form-group text-right">
+                                <!-- <a href="" class="btn btn-danger">Удалить</a>-->
+                                <button type="submit" class="btn btn-success">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Добавить ссылку на цену</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/price/add">
+                            <div class="form-group">
+                                <label>Автосалон</label>
+                                <select class="form-control js-select-shop" required name="shop">
+                                    <option disabled selected></option>
+                                    <?php foreach($shop as $item) { ?>
+                                        <option value="<?php echo $item['shop_id']; ?>"><?php echo $item['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Шаблон из автосалона</label>
+                                <input type="text" class="form-control js-add-price-parent-tempalte" disabled name="parent_template">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Марка автомобиля</label>
+                                <select class="form-control js-select-mark-1" required name="mark">
+                                    <option disabled selected></option>
+                                    <?php foreach($mark as $item) { ?>
+                                        <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
+                                    <?php } ?>                                    
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Модель автомобиля</label>
+                                <select class="form-control js-select-model-1" required name="model">
+                                    <option disabled selected></option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Шаблон <small>(если поле не заполнено, то шаблон берется из поля "Шаблон из автосалона")</small></label>
+                                <input type="text" name="tempalte" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ссылка на сайт</label>
+                                <input type="url" name="url" class="form-control" required>
+                            </div>
+
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <?php echo $this->fetch('footer.phtml'); ?>
+
+        <script type="text/javascript">
+            (function() {
+                reset();
+
+                function updateTable() {
+                    $.post({
+                        url: 'table',
+                        method: 'POST',
+                        data: data,
+                        beforeSend: function() {
+                            $('.js-apply, .js-reset').attr('disabled', true);
+                            $('.js-apply i').show();
+
+                        },
+
+                        complete: function() {
+
+                        },
+
+                        success: function(data) {
+                            $('.js-table-container').html(data);
+
+                            $('.js-apply, .js-reset').attr('disabled', false);
+                            $('.js-apply i').hide();
+                        }
+                    })
+                }
+
+                function reset() {
+                    window.data = {};
+
+                    window.data['mark'] = 0;
+                    window.data['model'] = 0;
+                    window.data['shop'] = [];
+                    window.data['city'] = [];
+                }
+
+                $(document).ready(function() {
+                    updateTable();
+                });
+
+                // Выбор марки авто
+                $('.js-select-mark').change(function() {
+                    var id = $(this).val();
+
+                    window.data['mark'] = id;
+
+                    var str = '<option value="0">Любая</option>';
+                    $.ajax({
+                        method: 'GET',
+                        url: 'model/' + id,
+                        success: function(data) {
+                            for(var item in data) {
+                                $('.js-select-model').html('');
+
+                                var id = data[item]['id'];
+                                var name = data[item]['name'];
+
+                                str = str + '<option value="' + id + '">' + name + '</option>';
+                            }
+
+                            $('.js-select-model').html(str);
+                        }           
+                    })
+                });
+
+                // Выбор модели авто
+                $('.js-select-model').change(function() {
+                    var id = $(this).val();
+
+                    window.data['model'] = id;
+                });
+
+                // Выбор магазина
+                $('input[name="shop"]').click(function() {
+                    var values = [];
+                    $('input[name="shop"]:checked').each(function() {
+                        values.push( $(this).val() );
+                    });
+
+                    window.data['shop'] = values;
+                });
+
+                // Выбор города
+                $('input[name="city"]').click(function() {
+                    var values = [];
+                    $('input[name="city"]:checked').each(function() {
+                        values.push( $(this).val() );
+                    });
+
+                    window.data['city'] = values;
+                }); 
+
+                $('.js-apply').click(function() {
+                    updateTable();
+                });
+
+                $('.js-reset').click(function() {
+                    $('.js-select-model').html('<option value="0">Любая</option>');
+
+                    $('input[type=checkbox]').prop('checked',false);
+
+                    reset();
+                    updateTable();
+                }); 
+
+                // Выбор марки авто для "Добавления ссылки на цену "
+                $('.js-select-mark-1').change(function() {
+                    var id = $(this).val();
+
+                    window.data['mark'] = id;
+
+                    var str = '';
+                    $.ajax({
+                        method: 'GET',
+                        url: 'model/' + id,
+                        success: function(data) {
+                            for(var item in data) {
+                                $('.js-select-model-1').html('');
+
+                                var id = data[item]['id'];
+                                var name = data[item]['name'];
+
+                                str = str + '<option value="' + id + '">' + name + '</option>';
+                            }
+
+                            $('.js-select-model-1').html(str);
+                        }           
+                    })
+                });    
+
+                // Выбор автосалона
+                $('.js-select-shop').change(function() {
+                    var id = $(this).val();
+
+                    $.ajax({
+                        url: '/shop/info/' + id,
+                        method: 'GET',
+                        success: function(data) {
+                            $('#js-add-price-parent-tempalte').val( data['template'] );
+                        }
+                    })
+                });  
+
+                // Просмотр цены
+                $('#myModal2').on('shown.bs.modal', function (event) {
+                    var a = $(event.relatedTarget);
+
+                    var parent_template = a.data('parent-template')
+                    var url = a.data('url')
+                    var id = a.data('id')
+                    var template = a.data('template')
+
+                    $('.js-show-price-form').find('input[name="parent_template"]').val(parent_template);
+                    $('.js-show-price-form').find('input[name="url"]').val(url);
+                    $('.js-show-price-form').find('input[name="id"]').val(id);
+                    $('.js-show-price-form').find('input[name="template"]').val(template);
+                }); 
+            })();            
+        </script>
     </body>
 </html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <?php echo $this->fetch('head.phtml'); ?>
+    </head>
+    <body>
+        <?php echo $this->fetch('navbar.phtml'); ?>
+
+        <div class="container-fluid">
+            <legend><h1>Список автосалонов</h1></legend>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+                        <i class="fas fa-plus"></i>
+                         Добавить автосалон
+                    </button>
+                </div>
+            </div>
+
+            <br/>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <ul>
+                        <?php foreach($shop as $item) { ?>
+                            <li>
+                                <?php echo $item['name']; ?>
+                                <a href="/shop/remove/<?php echo $item['id']; ?>">
+                                    <i class="far fa-trash-alt"></i>
+                                </a>
+                            </li>  
+                        <?php } ?>
+                    </ul>
+                </div>               
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Добавить автосалон</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/shop/add">
+                             <div class="form-group">
+                                <label>Город</label>
+                                <select class="form-control" name="city">
+                                    <?php foreach($city as $item) { ?>
+                                        <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                                                   
+                            <div class="form-group">
+                                <label>Название автосалона</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ссылка на сайты</label>
+                                <input type="text" name="url" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Шаблон для поиска цены</label>
+                                <input type="text" name="template" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php echo $this->fetch('footer.phtml'); ?>
+    </body>
+</html>
