@@ -20,3 +20,7 @@ MYSQL_USER=root
 MYSQL_PASS=
 MYSQL_DATABASE=carprice
 ```
+
+### Настройки проекта
+
+Все настройки проекта содержатся в файле src/settings.php
