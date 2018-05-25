@@ -46,7 +46,8 @@
 		    return [
 		    	'data' => $data,
 		    	'shop' => $shop,
-		    	'mark' => $this->db->getAll('SELECT * FROM mark;')		    
+		    	'mark' => $this->db->getAll('SELECT * FROM mark;'),
+		    	'empty' => empty($shop)	    
 		    ];
 		}
 

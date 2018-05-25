@@ -386,7 +386,15 @@
                             template: template
                         },
                         success: function(data) {
+                            console.log(data);
                             
+                            $('.new-price-moda').show();
+
+                            if(data.price === "") {
+                                $('.new-price-moda .price').text('Не найдено');
+                            } else {
+                                $('.new-price-moda .price').text(data.price);
+                            }
                         }
                     })
                 });
