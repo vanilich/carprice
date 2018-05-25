@@ -5,14 +5,7 @@
     /**
     * Обновление цен на сайт
     **/
-    class RefreshPriceTask {
-        protected $container;
-
-        public function __construct(ContainerInterface $container) {
-            set_time_limit(0);
-
-            $this->container = $container;
-        }
+    class RefreshPriceTask extends BaseTask {
 
         public function command($args) {
             $query = "";
