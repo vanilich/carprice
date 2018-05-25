@@ -20,21 +20,24 @@ return [
             'host'  => '127.0.0.1',
             'user'  => 'root',
             'pass'  => '',
-            'db'    => 'carprice',
+            'db'    => 'lol',
         ],
 
         'auth' => [
             'user' => 'admin',
             'pass' => 'admin'
-        ]
+        ],
 
+        'migration' => [
+            'up' => 'src/database/up.sql',
+            'down' => 'src/database/down.sql'
+        ]
     ],
     'commands' => [
         // Обновление цены на сайте
         'RefreshPriceTask' => \RefreshPriceTask::class,
 
-        // Работа с миграциями базы данных
-        'MigrationUpTask' => \MigrationUpTask::class,
-        'MigrationDownTask' => \MigrationDownTask::class
+        // Выполение произвольного sql кода
+        'ExecuteSQLTask' => \ExecuteSQLTask::class
     ],    
 ];
