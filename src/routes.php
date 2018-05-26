@@ -4,7 +4,6 @@
 	$app->post('/login', 	\LoginController::class . ':doLogin');
 	$app->any('/logout', 	\LoginController::class . ':logout');
 
-
 	$app->group('', function() {
 		// Главная страница
 		$this->get('/', 		\MainController::class . ':index');
@@ -44,5 +43,4 @@
 		$this->post('/price/edit', 		 \PriceController::class . ':edit');
 		$this->get('/price/remove/{id}', \PriceController::class . ':remove');
 		$this->post('/price/test', 		 \PriceController::class . ':test');
-
 	})->add( new AuthMiddleware() );

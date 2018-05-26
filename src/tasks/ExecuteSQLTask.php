@@ -19,7 +19,16 @@
                 if( file_exists($path) ) {
                     $sql = file_get_contents($path);
 
-                    if( $this->container->db->query($sql) ) {
+                    $host = $this->container->get('settings')['db']['host'];
+                    $user = $this->container->get('settings')['db']['user'];
+                    $pass = $this->container->get('settings')['db']['pass'];
+                    $db = $this->container->get('settings')['db']['db'];
+
+                    $db = new PDO('mysql:host=' . $host . ';dbname=' . $db . ';charset=UTF8', $user, $pass);
+
+                    $result = $db->exec($sql);
+                    
+                    if( $result !== false ) {
                         $this->container->logger->info("Migration: Success execute task");
                     } else {
                         $this->container->logger->error("Migration: Cannot execute command. Full path: " . $path);

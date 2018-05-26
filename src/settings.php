@@ -30,7 +30,9 @@ return [
 
         'migration' => [
             'up' => 'src/database/up.sql',
-            'down' => 'src/database/down.sql'
+            'down' => 'src/database/down.sql',
+            'truncate' => 'src/database/truncate.sql',
+            'insert' => 'src/database/insert.sql'
         ]
     ],
     'commands' => [
