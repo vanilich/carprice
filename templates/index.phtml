@@ -127,6 +127,12 @@
                                 <input type="text" class="form-control" name="template">
                             </div>
 
+                            <div class="form-group">
+                                <p class="help-text">
+                                    Цены в главной таблице обновятся с следующим запуском парсера цен
+                                </p>
+                            </div>
+
                             <div class="form-group text-right">
                                 <button class="btn btn-primary js-refresh-price" style="float: left;">
                                     <i class="fas fa-sync"></i>
@@ -366,6 +372,8 @@
                     $('.js-show-price-form').find('input[name="id"]').val(id);
                     $('.js-show-price-form').find('input[name="template"]').val(template);
                     $('.js-show-price-form').find('.js-delete-price').attr('href', href);
+
+                    $('.new-price-modal').hide();
                 }); 
 
                 $('.js-refresh-price').click(function(event) {
