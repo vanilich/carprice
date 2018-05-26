@@ -19,5 +19,5 @@
 	}
 
 	// usage
-	window.showMessage('message', 'default');
+	// window.showMessage('message', 'default');
 })();
