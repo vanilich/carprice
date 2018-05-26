@@ -51,7 +51,7 @@
                 // Количество колонок, на которое надо разделить массив
                 $countCol = 3;
                 // Получаем количество элементов марки автомобиля в каждой колонке
-                $size = round(count($data) / $countCol);
+                $size = round(count($data) / $countCol) + 1;
                 // Делим массив на три части
                 $data = array_chunk($data, $size);
             ?>
