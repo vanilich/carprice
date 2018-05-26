@@ -35,6 +35,7 @@
 
 		// Работа с автосалонами
 		$this->post('/shop/add', 		\ShopController::class . ':add');
+		$this->post('/shop/edit', 		\ShopController::class . ':edit');
 		$this->get('/shop/remove/{id}', \ShopController::class . ':remove');
 		$this->get('/shop/info/{id}', 	\ShopController::class . ':info');
 

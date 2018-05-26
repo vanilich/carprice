@@ -44,5 +44,23 @@
 			if($data) {
 				return $response->withJson($data);	
 			}		   
-		}				
+		}
+
+		/**
+		* Редактирование автосалона
+		**/
+		public function edit(Request $request, Response $response, array $args) {
+			$body = $request->getParsedBody();
+
+			if( isset($body['id']) AND isset($body['name']) AND isset($body['url']) AND isset($body['template']) ) {
+				$id = intval($body['id']);
+				$name = $body['name'];
+				$url = $body['url'];
+				$template = $body['template'];
+
+				$this->container->db->query('UPDATE shop SET name=?s, url=?s, template=?s WHERE id=?i', $name, $url, $template, $id);
+
+				return $response->withRedirect('/shop');  
+			}
+		}							
 	}

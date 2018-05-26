@@ -9,7 +9,7 @@
 2. php composer.phar update
 3. Создаем .env файл в корневой директории проекта
 4. Создаем дамп бд: php index.php ExecuteSQLTask up
-5. Нвполняем его данными: php index.php ExecuteSQLTask insert
+5. Наполняем его данными: php index.php ExecuteSQLTask insert
 ```
 
 ### Пример .env файла

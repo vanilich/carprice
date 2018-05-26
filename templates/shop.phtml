@@ -29,6 +29,15 @@
                                 <a href="/shop/remove/<?php echo $item['id']; ?>" onclick="return confirm('Вы действильно хотите удалить этот автосалон?');">
                                     <i class="far fa-trash-alt"></i>
                                 </a>
+                                <a data-toggle="modal" 
+                                   data-target="#myModal3" 
+                                   data-id="<?php echo $item['id']; ?>" 
+                                   data-name="<?php echo $item['name']; ?>"
+                                   data-url="<?php echo $item['url']; ?>"
+                                   data-template="<?php echo $item['template']; ?>"
+                                >
+                                    <i class="far fa-edit"></i>
+                                </a>  
                             </li>  
                         <?php } ?>
                     </ul>
@@ -79,6 +88,58 @@
             </div>
         </div>
 
+       <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Изменить автосалон</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/shop/edit">
+                            <input type="hidden" name="id" value="">
+
+                            <div class="form-group">
+                                <label>Название автосалона</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ссылка на автосалон</label>
+                                <input type="text" name="url" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Шаблон</label>
+                                <input type="text" name="template" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <?php echo $this->fetch('footer.phtml'); ?>
+
+        <script type="text/javascript">
+            // Изменение автосалона
+            $('#myModal3').on('shown.bs.modal', function (event) {
+                var a = $(event.relatedTarget);
+
+                var id = a.data('id')
+                var name = a.data('name')
+                var url = a.data('url')
+                var template = a.data('template')
+
+                $(this).find('input[name="id"]').val(id);
+                $(this).find('input[name="name"]').val(name);
+                $(this).find('input[name="url"]').val(url);
+                $(this).find('input[name="template"]').val(template);
+            });             
+        </script>       
     </body>
 </html>

@@ -22,7 +22,7 @@
             $query .= "        price.active = 1 AND ";
             $query .= "        price.shop_id = shop.id AND ";
             $query .= "        price.updated_at < NOW() - INTERVAL '1' MINUTE ";
-            $query .= "LIMIT 5000;";
+            $query .= "LIMIT 6000;";
 
             // Получаем данные из бд с списком не актуальных цен
             $result = $this->container->db->getAll($query);
