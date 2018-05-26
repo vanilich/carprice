@@ -12,6 +12,7 @@
 		    $city = $this->container->db->getAll('SELECT * FROM city;');
 		    $shop  = $this->container->db->getAll("SELECT id as 'shop_id', name FROM shop ORDER by name DESC;");
 
+		    $this->container->renderer->addAttribute('title', 'Главная страница');
 		    return $this->container->renderer->render($response, 'index.phtml', [
 		    	'shop' => $shop,
 		    	'mark' => $mark,
@@ -35,6 +36,7 @@
 			$cars = $this->container->db->getAll($query);
 			$mark = $this->container->db->getAll('SELECT * FROM mark;');
 
+			$this->container->renderer->addAttribute('title', 'Автомобили');
 		    return $this->container->renderer->render($response, 'cars.phtml', [
 		    	'cars' => $cars,
 		    	'mark' => $mark
@@ -48,6 +50,7 @@
 			$shop = $this->container->db->getAll('SELECT * FROM shop;');
 			$city = $this->container->db->getAll('SELECT * FROM city;');
 
+			$this->container->renderer->addAttribute('title', 'Автосалоны');
 		    return $this->container->renderer->render($response, 'shop.phtml', [
 		    	'shop' => $shop,
 		    	'city' => $city

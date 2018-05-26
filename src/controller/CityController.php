@@ -10,6 +10,7 @@
 		public function all(Request $request, Response $response, array $args) {
 			$city = $this->container->db->getAll('SELECT * FROM city;');
 
+			$this->container->renderer->addAttribute('title', 'Города');
 		    return $this->container->renderer->render($response, 'city.phtml', [
 		    	'city' => $city
 		    ]);
