@@ -39,9 +39,9 @@
 				$template = $body['template'];
 
 				if( !empty($template) ) {
-					$this->container->db->query('UPDATE price SET url=?s, template=?s WHERE id=?i', $url, $template, $id);
+					$this->container->db->query('UPDATE price SET url=?s, template=?s, active=1 WHERE id=?i', $url, $template, $id);
 				} else {
-					$this->container->db->query('UPDATE price SET url=?s WHERE id=?i', $url, $id);
+					$this->container->db->query('UPDATE price SET url=?s, active=1 WHERE id=?i', $url, $id);
 				}
 			}	
 			
