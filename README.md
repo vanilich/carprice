@@ -2,14 +2,14 @@
 
 Парсер цен на автомобили с официальных сайтов диллеров и выгрузка информации в Excel.
 
-### Установка
+## Установка
 
 ```
 1. git clone https://github.com/vanilich/carprice.git
 2. php composer.phar update
 3. Создаем .env файл в корневой директории проекта
-4. Создаем дамп бд: php index.php ExecuteSQLTask.php up
-5. НАполняем его данными: php index.php ExecuteSQLTask.php data
+4. Создаем дамп бд: php index.php ExecuteSQLTask up
+5. Нвполняем его данными: php index.php ExecuteSQLTask insert
 ```
 
 ### Пример .env файла
@@ -31,7 +31,25 @@ MYSQL_DATABASE=carprice
 Вся суть заключается в файле src/task/ExecuteSQLTask.php, который выполняет произвольный SQL код. Пути до файлов находятся в конфиге settings.php в разделе 'migration'.
 
 ```
+Использование php index.php ExecuteSQLTask [имя sql скрипта]
 up - развернуть бэкап на сервере
-down - очистить базу данных на сервере
-data - восстановить данные
+insert - вставить данные в таблицы
+truncate - очистить таблицы от данных
+down - удалить все таблицы из базы данных
 ```
+
+### Структура php проекта
+
+/src/
+
+* controller - контроллеры
+* database - sql файлы миграции бд
+* middleware - посредники приложения
+* model - бизнес-логика
+* tasks - задачи, запускаемые из консоли
+* application.php - входной файл приложения
+* dependencies.php - зависимости
+* helper.php - вспомональные фукнции и классы
+* middleware.php - описание посредников приложения
+* routes.php - маршруты
+* settings.php - настройки
