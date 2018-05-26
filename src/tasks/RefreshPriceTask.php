@@ -7,6 +7,24 @@
     **/
     class RefreshPriceTask extends BaseTask {
 
+        protected $logger;
+
+        public function __construct($container) {
+            parent::__construct($container);
+
+            $filename = 'parse-price-' . date("Y-m-d H:i:s") . '.log';
+
+            $settings = [
+                'name' => 'refresh-price',
+                'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../../logs/' . $filename,
+                'level' => \Monolog\Logger::DEBUG,
+            ];
+
+            $this->logger = new Monolog\Logger($settings['name']);
+            $this->logger->pushProcessor(new Monolog\Processor\UidProcessor());
+            $this->logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
+        }
+
         public function command($args) {
             $query = "";
             $query .= "SELECT ";
@@ -22,13 +40,16 @@
             $query .= "        price.active = 1 AND ";
             $query .= "        price.shop_id = shop.id AND ";
             $query .= "        price.updated_at < NOW() - INTERVAL '1' MINUTE ";
-            $query .= "LIMIT 5000;";
+            $query .= "LIMIT 10000;";
 
             // Получаем данные из бд с списком не актуальных цен
             $result = $this->container->db->getAll($query);
 
             if(empty($result)) {
-                $this->container->logger->info("Nothing to refresh");
+                $this->logger->info("Nothing to refresh");
+                return;
+            } else {
+                $this->logger->info("Parse price will be starting...");
             }
 
             foreach ($result as $value) {
@@ -52,25 +73,27 @@
                             // Обновляем значение цены в базе данных
                             $query = "UPDATE price SET price=?i, updated_at=NOW() WHERE id=?i";
                             if( $this->container->db->query($query, $price, $value['id']) ) {
-                                $this->container->logger->info("Price with id '" . $value['id'] . "' success updated");
+                                $this->logger->info("Price with id '" . $value['id'] . "' success updated");
                             } else {
-                                $this->container->logger->error("Price with id '" . $value['id'] . "' cannot add in DB. Full query: '" . $query . "'");
+                                $this->logger->error("Price with id '" . $value['id'] . "' cannot add in DB. Full query: '" . $query . "'");
                             }
                         } else {
                             $this->container->db->query("UPDATE price SET active=0 WHERE id=?i", $value['id']);
-                            $this->container->logger->warning($message = "Price with id '" . $value['id'] . "' cannot find in template '" . $template . "'");
+                            $this->logger->warning($message = "Price with id '" . $value['id'] . "' cannot find in template '" . $template . "'");
                         }
 
                         unset($dom);
                     } else {
                         $this->container->db->query("UPDATE price SET active=0 WHERE id=?i", $value['id']);
-                        $this->container->logger->warning("Price with id '" . $value['id'] . "' has not create dom object");                        
+                        $this->logger->warning("Price with id '" . $value['id'] . "' has not create dom object");                        
                     }
                 } else {
                     $this->container->db->query("UPDATE price SET active=0 WHERE id=?i", $value['id']);
-                    $this->container->logger->warning("Price with id '" . $value['id'] . "' has not 200 http response code");
+                    $this->logger->warning("Price with id '" . $value['id'] . "' has not 200 http response code");
                 }
             }
+
+            $this->logger->info("Parse price ending...");
         }
 
         public function check404($url) {
