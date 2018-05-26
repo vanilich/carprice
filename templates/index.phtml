@@ -375,7 +375,9 @@
                     var url = $('.js-show-price-form').find('input[name="url"]').val();
                     var template = $('.js-show-price-form').find('input[name="template"]').val();
 
-                    console.log(id, url, template);
+                    var self = this;
+
+                    $(this).attr('disabled', true);
 
                     $.ajax({
                         method: 'POST',
@@ -388,13 +390,15 @@
                         success: function(data) {
                             console.log(data);
                             
-                            $('.new-price-moda').show();
+                            $('.new-price-modal').show();
 
                             if(data.price === "") {
-                                $('.new-price-moda .price').text('Не найдено');
+                                $('.new-price-modal .price').text('Не найдено');
                             } else {
-                                $('.new-price-moda .price').text(data.price);
+                                $('.new-price-modal .price').text(data.price);
                             }
+
+                            $(self).attr('disabled', false);
                         }
                     })
                 });
