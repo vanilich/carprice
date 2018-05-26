@@ -25,17 +25,20 @@
 
             <br/>
 
-            <?php //print_r($cars); ?>
-
             <?php
+                // Подготавливаем данные
                 $data = [];
+                // Проходимся по массиву с автомобилями
                 foreach ($cars as $value) {
+                    // Получаем id марки автомобился
                     $mark_id = $value['mark_id'];
 
+                    // Если такой марки нет в массиве с автомобилями, то создаем в нем пустой массив
                     if( !isset($data[$mark_id]) ) {
                         $data[$mark_id] = [];
                     }
 
+                    // Заполняем массив с маркой автомобиля данными 
                     $data[$mark_id][] = [
                         'model_id' => $value['model_id'],
                         'model_name' => $value['model_name'],
@@ -48,11 +51,13 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <?php /* Выводим марки автомобилей */ ?>
                         <?php foreach($data as $item) { ?>
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="headingTwo">
                                     <h4 class="panel-title">
                                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#tab<?php echo $item[0]['mark_id']; ?>">
+                                            <?php /* Соотвественно первый элемент вложенного масиива содержит марку автомобиля */?>
                                             <?php echo $item[0]['mark_name']; ?>
                                             <a href="/mark/remove/<?php echo $item[0]['mark_id']; ?>" onclick="return confirm('Вы действильно хотите удалить эту марку автомобиля?');">
                                                 <i class="far fa-trash-alt"></i>
@@ -69,7 +74,8 @@
                                 </div>
                                 <div id="tab<?php echo $item[0]['mark_id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                     <div class="panel-body">
-                                        <ul>
+                                        <ul>    
+                                            <?php /* Выводим модели автомобилей */ ?>
                                             <?php foreach($item as $value) { ?>
                                                 <li>
                                                     <?php echo $value['model_name']; ?>
