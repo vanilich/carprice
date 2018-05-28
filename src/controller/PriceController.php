@@ -79,8 +79,7 @@
 				// Парсим цену с сайта
 				if( ($price = PriceModel::parse($url, $template)) !== false ) {
 
-					// TODO Сохранение цены и шаблона после теста
-					//$this->container->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=1 WHERE id=?i", $price, $id);
+					$this->container->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=1 WHERE id=?i", $price, $id);
 
 					return $response->withJson( ['price' => $price] );	
 				} else {
