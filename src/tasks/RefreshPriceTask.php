@@ -12,7 +12,7 @@
         public function __construct($container) {
             parent::__construct($container);
 
-            $filename = 'parse-price-' . date("Y-m-d H:i:s") . '.log';
+            $filename = 'parse-price-' . date("Y-m-d H.i.s") . '.log';
 
             $settings = [
                 'name' => 'refresh-price',
