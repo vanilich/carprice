@@ -39,9 +39,9 @@
 				$template = $body['template'];
 
 				if( !empty($template) ) {
-					$this->container->db->query('UPDATE price SET url=?s, template=?s WHERE id=?i', $url, $template, $id);
+					$this->container->db->query('UPDATE price SET url=?s, template=?s, active=1 WHERE id=?i', $url, $template, $id);
 				} else {
-					$this->container->db->query('UPDATE price SET url=?s WHERE id=?i', $url, $id);
+					$this->container->db->query('UPDATE price SET url=?s, active=1 WHERE id=?i', $url, $id);
 				}
 			}	
 			
@@ -79,7 +79,8 @@
 				// Парсим цену с сайта
 				if( ($price = PriceModel::parse($url, $template)) !== false ) {
 
-					$this->container->db->query("UPDATE price SET price=?i, updated_at=NOW() WHERE id=?i", $price, $id);
+					// TODO Сохранение цены и шаблона после теста
+					//$this->container->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=1 WHERE id=?i", $price, $id);
 
 					return $response->withJson( ['price' => $price] );	
 				} else {

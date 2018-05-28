@@ -48,7 +48,7 @@ CREATE TABLE `price` (
   `active` tinyint(4) DEFAULT '1',
   `url` varchar(256) NOT NULL,
   `template` varchar(256) DEFAULT NULL,
-  `price` int(11) DEFAULT NULL,
+  `price` bigint(20) DEFAULT NULL,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
