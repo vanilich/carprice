@@ -18,9 +18,9 @@
 				$url = $body['url'];
 
 				if( !empty($template) ) {
-					$this->container->db->query('INSERT INTO price(shop_id, model_id, url, template) VALUES(?i, ?i, ?s, ?s)', $shop, $model, $url, $template);
+					$this->container->db->query('INSERT INTO price(shop_id, model_id, url, template, active) VALUES(?i, ?i, ?s, ?s, 1)', $shop, $model, $url, $template);
 				} else {
-					$this->container->db->query('INSERT INTO price(shop_id, model_id, url) VALUES(?i, ?i, ?s)', $shop, $model, $url);
+					$this->container->db->query('INSERT INTO price(shop_id, model_id, url, active) VALUES(?i, ?i, ?s, 1)', $shop, $model, $url);
 				}	
 			}
 
