@@ -1,5 +1,5 @@
 <?php
-	define('PATH_TO_ENV', '.env');
+	define('PATH_TO_ENV', __DIR__ . '/../.env');
 
 	// Устанавливаем переменные окружения
 	if( file_exists(PATH_TO_ENV) ) {
