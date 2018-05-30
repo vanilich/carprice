@@ -98,15 +98,15 @@
             }
 
             // Имя Excel файла
-			$filename = 'price-' . date("Y-m-d H:i:s") . '.xls';
-
-			// Отдаем excel файл клиенту
-			header('Content-Type: application/vnd.ms-excel');
-			header('Content-Disposition: attachment;filename="' . $filename . '"');
-			header('Cache-Control: max-age=0');
+			$filename = 'price-' . date("Y-m-d H.i.s") . '.xls';
+			$path = 'res/' . $filename;
 
 			$objWriter = PHPExcel_IOFactory::createWriter($doc, 'Excel5');
-			$objWriter->save('php://output');
+			$objWriter->save($path);
+
+			return $response->withJson([
+				'url' => $path
+			]);	
 		}
 
 	}

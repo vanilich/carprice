@@ -87,7 +87,7 @@
                     </button>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="/excel" class="btn btn-success">
+                    <a href="#" class="btn btn-success js-excel-open" data-loading-text="Загрузка...">
                         <i class="far fa-file-excel"></i>
                          Выгрузка в Excel
                     </a>
@@ -257,6 +257,29 @@
 
                 $(document).ready(function() {
                     updateTable();
+                });
+
+                // Выгрузка excel
+                $('.js-excel-open').click(function(event) {
+                    event.preventDefault();
+
+                    var self = this;
+
+                    $.ajax({
+                        url: '/excel',
+                        method: 'POST',
+                        data: window.data,
+                        beforeSend: function() {
+                            $(self).button('loading');
+                        },
+
+                        success: function(data) {
+                            if(data.url) {
+                                window.open(data.url, '_blank' );
+                            }
+                            $(self).button('reset');
+                        }
+                    });
                 });
 
                 // Выбор марки авто
