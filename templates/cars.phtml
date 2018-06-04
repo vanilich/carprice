@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <?php echo $this->fetch('head.phtml'); ?>
+    </head>
+    <body>
+        <?php echo $this->fetch('navbar.phtml'); ?>
+
+        <div class="container-fluid">
+            <legend><h1>Список моделей и марок автомобилей</h1></legend>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal1">
+                        <i class="fas fa-plus"></i>
+                        Добавить марку автомобиля
+                    </button>
+
+                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2">
+                        <i class="fas fa-plus"></i>
+                        Добавить модель автомобиля
+                    </button>                   
+                </div>
+            </div>
+
+            <br/>
+
+            <?php
+                // Подготавливаем данные
+                $data = [];
+                // Проходимся по массиву с автомобилями
+                foreach ($cars as $value) {
+                    // Получаем id марки автомобился
+                    $mark_id = $value['mark_id'];
+
+                    // Если такой марки нет в массиве с автомобилями, то создаем в нем пустой массив
+                    if( !isset($data[$mark_id]) ) {
+                        $data[$mark_id] = [];
+                    }
+
+                    // Заполняем массив с маркой автомобиля данными 
+                    $data[$mark_id][] = [
+                        'model_id' => $value['model_id'],
+                        'model_name' => $value['model_name'],
+                        'mark_id' => $value['mark_id'],
+                        'mark_name' => $value['mark_name'],
+                    ];
+                }
+
+
+                // Количество колонок, на которое надо разделить массив
+                $countCol = 3;
+                // Получаем количество элементов марки автомобиля в каждой колонке
+                $size = round(count($data) / $countCol) + 1;
+                // Делим массив на три части
+                $data = array_chunk($data, $size);
+            ?>
+
+            <div class="row">
+                <?php /* Сначала проходимся по колонкам  */ ?>
+                <?php foreach($data as $col) { ?>
+                    <div class="col-md-4">
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <?php /* Выводим марки автомобилей */ ?>
+                            <?php foreach($col as $item) { ?>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#tab<?php echo $item[0]['mark_id']; ?>">
+                                                <?php /* Соотвественно первый элемент вложенного масиива содержит марку автомобиля */?>
+                                                <?php echo $item[0]['mark_name']; ?>
+                                                <a href="/mark/remove/<?php echo $item[0]['mark_id']; ?>" onclick="return confirm('Вы действильно хотите удалить эту марку автомобиля?');">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>                                                        
+                                                <a data-toggle="modal" 
+                                                   data-target="#myModal4" 
+                                                   data-id="<?php echo $item[0]['mark_id']; ?>" 
+                                                   data-name="<?php echo $item[0]['mark_name']; ?>"
+                                                >
+                                                    <i class="far fa-edit"></i>
+                                                </a>                                            
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="tab<?php echo $item[0]['mark_id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                        <div class="panel-body">
+                                            <ul>    
+                                                <?php /* Выводим модели автомобилей */ ?>
+                                                <?php foreach($item as $value) { ?>
+                                                    <li>
+                                                        <?php echo $value['model_name']; ?>
+                                                        <a href="/model/remove/<?php echo $value['model_id']; ?>" onclick="return confirm('Вы действильно хотите удалить эту модель автомобиля?');">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </a>                                                        
+                                                        <a data-toggle="modal" 
+                                                           data-target="#myModal3" 
+                                                           data-id="<?php echo $value['model_id']; ?>" 
+                                                           data-name="<?php echo $value['model_name']; ?>"
+                                                        >
+                                                            <i class="far fa-edit"></i>
+                                                        </a>                                                    
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>                                       
+                                        </div>
+                                    </div>
+                                </div> 
+                            <?php } ?>   
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Добавить марку автомобиля</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/mark/add">
+                            <div class="form-group">
+                                <label>Название марки</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Добавить модель автомобиля</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/model/add">
+                            <div class="form-group">
+                                <label>Марка автомобился</label>
+                                <select class="form-control" name="mark" required>
+                                    <option disabled selected></option>
+                                    <?php foreach($mark as $item) { ?>
+                                        <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                       
+                            <div class="form-group">
+                                <label>Название модели</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Изменить модель автомобиля</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/model/edit">
+                            <input type="hidden" name="id" value="">
+
+                            <div class="form-group">
+                                <label>Название модели</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Изменить марку автомобиля</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/mark/edit">
+                            <input type="hidden" name="id" value="">
+
+                            <div class="form-group">
+                                <label>Название марки</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php echo $this->fetch('footer.phtml'); ?>
+
+        <script type="text/javascript">
+            // Изменение названия модели автомобился
+            $('#myModal3').on('shown.bs.modal', function (event) {
+                var a = $(event.relatedTarget);
+
+                var id = a.data('id')
+                var name = a.data('name')
+
+                $(this).find('input[name="id"]').val(id);
+                $(this).find('input[name="name"]').val(name);
+            });  
+
+             // Изменение названия марки автомобился
+            $('#myModal4').on('shown.bs.modal', function (event) {
+                var a = $(event.relatedTarget);
+
+                var id = a.data('id')
+                var name = a.data('name')
+
+                $(this).find('input[name="id"]').val(id);
+                $(this).find('input[name="name"]').val(name);
+            });                    
+        </script>        
+    </body>
+</html>

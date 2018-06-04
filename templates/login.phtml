@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <?php echo $this->fetch('head.phtml'); ?>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-4 col-md-4">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <form class="well" method="POST" action="/login">
+                        <div class="form-group">
+                            <legend>Форма авторизации</legend>
+                        </div>
+                        <div class="form-group">
+                            <label>Логин:</label>
+                            <input type="text" name="login" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль:</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div> 
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Войти</button>
+                        </div>                                               
+                    </form>
+                </div>               
+            </div>
+        </div>
+
+        <?php echo $this->fetch('footer.phtml'); ?>
+    </body>
+</html>

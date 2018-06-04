@@ -15,5 +15,31 @@ return [
             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
             'level' => \Monolog\Logger::DEBUG,
         ],
+
+        'db' => [
+            'host'  => getenv('MYSQL_HOST'),
+            'user'  => getenv('MYSQL_USER'),
+            'pass'  => getenv('MYSQL_PASS'),
+            'db'    => getenv('MYSQL_DATABASE')
+        ],
+
+        'auth' => [
+            'user' => 'admin',
+            'pass' => 'admin'
+        ],
+
+        'migration' => [
+            'up' => 'src/database/up.sql',
+            'down' => 'src/database/down.sql',
+            'truncate' => 'src/database/truncate.sql',
+            'insert' => 'src/database/insert.sql'
+        ]
     ],
+    'commands' => [
+        // Обновление цены на сайте
+        'RefreshPriceTask' => \RefreshPriceTask::class,
+
+        // Выполение произвольного sql кода
+        'ExecuteSQLTask' => \ExecuteSQLTask::class
+    ],    
 ];

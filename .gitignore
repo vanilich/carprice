@@ -3,3 +3,6 @@
 !/logs/README.md
 composer.phar
 composer.lock
+/carprice.com/
+.env
+/res/
