@@ -112,6 +112,53 @@
 				}
 			}
 
-		}	
+		}
+
+        /**
+         * Получить список цен
+         */
+		public function get(Request $request, Response $response, array $args) {
+            $body = $request->getParsedBody();
+
+            if( isset($body['shop_id']) ) {
+                $shop_id = $body['shop_id'];
+
+                $result = $this->container->db->getAll("SELECT * FROM price WHERE shop_id=?i", $shop_id);
+
+                return $response->withJson($result);
+            }
+        }
+
+        /**
+         * Обновление цены
+         */
+        public function refresh(Request $request, Response $response, array $args) {
+            $body = $request->getParsedBody();
+
+            if( isset($body['id']) ) {
+                $id = intval($body['id']);
+
+                $priceModel = new PriceModel($this->container->db);
+
+                $result = $priceModel->getPriceWithParentShopTempalte($id);
+
+                $id = $result['id'];
+                $url = $result['url'];
+                $template = !empty($result['template']) ? $result['template'] : $result['parent_template'];
+
+                if( ($price = PriceModel::parse($url, $template)) !== false ) {
+
+                    if( !empty($result['template']) ) {
+                        $this->container->db->query("UPDATE price SET template=?s, price=?i, updated_at=NOW(), active=1 WHERE id=?i", $template, $price, $id);
+                    } else {
+                        $this->container->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=1 WHERE id=?i", $price, $id);
+                    }
+
+                    return $response->withJson( ['status' => 'ok'] );
+                } else {
+                    return $response->withJson( ['status' => 'error'] );
+                }
+            }
+        }
 
 	}

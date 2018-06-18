@@ -55,8 +55,12 @@
 		* Получаем данные из таблицы price вместе с родительским шаблоном из таблицы shop
 		* @return mixed
 		**/
-		public function getPriceWithParentShopTempalte() {
-			return $this->db->getAll("SELECT price.*, shop.template as 'parent_template' FROM price INNER JOIN shop ON shop.id=price.shop_id;");
+		public function getPriceWithParentShopTempalte($priceId = NULL) {
+		    if($priceId == NULL) {
+                return $this->db->getAll("SELECT price.*, shop.template as 'parent_template' FROM price INNER JOIN shop ON shop.id=price.shop_id;");
+            } else {
+                return $this->db->getRow("SELECT price.*, shop.template as 'parent_template' FROM price INNER JOIN shop ON shop.id=price.shop_id AND price.id=?i;", $priceId);
+            }
 		}
 
 
