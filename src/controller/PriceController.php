@@ -17,9 +17,9 @@
 				$url = $body['url'];
 
 				if( !empty($template) ) {
-					$this->container->db->query('INSERT INTO price(shop_id, model_id, url, template, active) VALUES(?i, ?i, ?s, ?s, 1)', $shop, $model, $url, $template);
+					$this->container->db->query('INSERT INTO price(updated_at, shop_id, model_id, url, template, active) VALUES("2010-01-01 16:32:33", ?i, ?i, ?s, ?s, 1)', $shop, $model, $url, $template);
 				} else {
-					$this->container->db->query('INSERT INTO price(shop_id, model_id, url, active) VALUES(?i, ?i, ?s, 1)', $shop, $model, $url);
+					$this->container->db->query('INSERT INTO price(updated_at, shop_id, model_id, url, active) VALUES("2010-01-01 16:32:33", ?i, ?i, ?s, 1)', $shop, $model, $url);
 				}	
 			}
 
@@ -41,10 +41,10 @@
                     $template = ( !empty($body['template'][$key]) ) ? $body['template'][$key] : NULL;
                     $url = $body['url'][$key];
 
-                    $queryParts[] = $this->container->db->parse("(?i, ?i, ?s, ?s, 1)", $shop, $model_id, $url, $template);
+                    $queryParts[] = $this->container->db->parse("('2010-01-01 16:32:33', ?i, ?i, ?s, ?s, 1)", $shop, $model_id, $url, $template);
                 }
 
-                $query = "INSERT INTO price(shop_id, model_id, url, template, active) VALUES" . implode(", ", $queryParts);
+                $query = "INSERT INTO price(updated_at, shop_id, model_id, url, template, active) VALUES" . implode(", ", $queryParts);
 
                 $this->container->db->query($query);
             }
