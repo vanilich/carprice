@@ -53,18 +53,6 @@
                         <?php foreach($shop as $value) { ?>
                             <th>
                                 <?php echo $value['name']; ?>
-                                <a href="#"
-                                   data-toggle="modal"
-                                   data-target="#modal-refresh-price"
-                                   data-shop-id="<?php echo $value['shop_id']; ?>"
-                                   data-shop-name="<?php echo $value['name']; ?>"
-                                >
-                                    <i class="fas fa-sync-alt"
-                                       data-toggle="tooltip"
-                                       data-placement="bottom"
-                                       title="Обновить цены на столбец '<?php echo $value['name'] ?>'"
-                                    ></i>
-                                </a>
                             </th>
                         <?php } ?>                        
                     </tr>
@@ -133,100 +121,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-refresh-price" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">
-                    Пакетное обновление цен для автосалона <span class="js-shop-name"></span>
-                </h4>
-            </div>
-            <div class="modal-body">
-                <textarea class="form-control" style="resize: none; width: 100%; height: 250px;"></textarea>
-
-                <br/>
-
-                <button class="btn btn-success js-start-refresh" data-shop-name="" data-shop-id="">
-                    <i class="fas fa-play"></i>
-                    Начать
-                </button>
-                <button class="btn btn-danger js-stop-refresh" disabled>
-                    <i class="far fa-stop-circle"></i>
-                    Стоп
-                </button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
-    (function() {
-        $('#modal-refresh-price').on('shown.bs.modal', function (event) {
-            var a = $(event.relatedTarget);
-
-            var name = a.data('shop-name');
-            var id = a.data('shop-id');
-
-            $(this).find('.js-start-refresh').attr('data-shop-name', name);
-            $(this).find('.js-start-refresh').attr('data-shop-id', id);
-
-            $(this).find('.js-start-refresh').attr('disabled', false);
-            $(this).find('.js-stop-refresh').attr('disabled', true);
-        });
-
-        $('#modal-refresh-price textarea').keydown(function() {
-            event.preventDefault();
-        });
-
-        $('.js-start-refresh').click(function() {
-            $(this).attr('disabled', true);
-            $('.js-stop-refresh').attr('disabled', false);
-
-            var id = $(this).data('shop-id');
-
-            $.post({
-                method: 'POST',
-                url: '/price/get',
-                data: {
-                    shop_id : id
-                },
-                dataType: 'json',
-
-                success: function(data) {
-                    for(var key in data) {
-                        $.post({
-                            method: 'POST',
-                            url: '/price/refresh',
-                            data: {
-                                id: data[key].id
-                            },
-                            timeout: 3000,
-
-                            error: function() {
-                                $('#modal-refresh-price textarea').append("Ошибка обновления цены для автомобиля " + data[key].url + "\n");
-                            },
-
-                            success: function() {
-                                $('#modal-refresh-price textarea').append("Успешное обновление цены для автомобиля " + data[key].url + "\n");
-                            }
-                        });
-
-                        break;
-                    }
-                }
-            });
-        });
-
-        $('.js-stop-refresh').click(function() {
-
-        });
-    })();
-
     (function() {
         $('[data-toggle="tooltip"]').tooltip();
         
