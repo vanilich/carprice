@@ -7,6 +7,7 @@
      *  Параметры:
      *      shop_id=1   // Id Магазина
      *      time=false  // Отключить интервал
+     *      limit=10    // Лимит записей для обновления
     **/
     class RefreshPriceTask extends BaseTask {
 
@@ -72,7 +73,13 @@
             } else {
                 $query .= "        price.updated_at < NOW() - INTERVAL '300' MINUTE ";
             }
-            $query .= "ORDER BY price.updated_at ASC LIMIT 100;";
+
+            // Лимит записей на обновление
+            if( isset($params['limit']) ) {
+                $query .= $this->container->db->parse("ORDER BY price.updated_at ASC LIMIT ?i;", $params['limit']);
+            } else {
+                $query .= "ORDER BY price.updated_at ASC LIMIT 100;";
+            }
 
             // Получаем данные из бд с списком не актуальных цен
             $result = $this->container->db->getAll($query);
