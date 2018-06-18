@@ -247,7 +247,7 @@
 
                             <div class="form-group">
                                 <label>Марка автомобиля</label>
-                                <select class="form-control js-select-mark-1" required name="mark">
+                                <select class="form-control js-select-mark-1 js-select-mark-pack" required name="mark">
                                     <option disabled selected></option>
                                     <?php foreach($mark as $item) { ?>
                                         <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
@@ -536,7 +536,12 @@
 
                 });
 
-                // Действие при выборе авто в модалке "Пакетное добавление цен"
+                // Действие при выборе марки авто в модалке  "Пакетное добавление цен"
+                $('.js-select-mark-pack').change(function() {
+                    $('.js-price-pack-container tbody').html('');
+                });
+
+                // Действие при выборе модели авто в модалке "Пакетное добавление цен"
                 $('.js-select-model-pack').change(function() {
                     var row = $( $('#js-row-packet-template').html() );
 
