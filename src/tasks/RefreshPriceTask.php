@@ -39,8 +39,8 @@
             $query .= "    INNER JOIN shop ON ";
             $query .= "        price.active = 1 AND ";
             $query .= "        price.shop_id = shop.id AND ";
-            $query .= "        price.updated_at < NOW() - INTERVAL '180' MINUTE ";
-            $query .= "LIMIT 30;";
+            $query .= "        price.updated_at < NOW() - INTERVAL '300' MINUTE ";
+            $query .= "ORDER BY price.updated_at ASC LIMIT 100;";
 
             // Получаем данные из бд с списком не актуальных цен
             $result = $this->container->db->getAll($query);
