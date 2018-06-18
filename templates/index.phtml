@@ -229,7 +229,7 @@
                         <h4 class="modal-title" id="myModalLabel">Пакетное добавление ссылкок на цены</h4>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="/price/add">
+                        <form method="POST" action="/price/packet_add">
                             <div class="form-group">
                                 <label>Автосалон</label>
                                 <select class="form-control js-select-shop" required name="shop">
@@ -257,7 +257,7 @@
 
                             <div class="form-group">
                                 <label>Модель автомобиля</label>
-                                <select class="form-control js-select-model-1 js-select-model-pack" required name="model">
+                                <select class="form-control js-select-model-1 js-select-model-pack" required>
                                     <option disabled selected></option>
                                 </select>
                             </div>
@@ -541,7 +541,7 @@
                     var row = $( $('#js-row-packet-template').html() );
 
                     // Заполняем данные input's
-                    $(row).find('input[name="model_id"]').val( $(this).val() );
+                    $(row).find('input[name="model_id[]"]').val( $(this).val() );
                     $(row).find('input[name="model"]').val( $("option:selected", this)[0].outerText );
 
                     $('.js-price-pack-container tbody').append(row);

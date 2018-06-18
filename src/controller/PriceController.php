@@ -10,9 +10,8 @@
 		public function add(Request $request, Response $response, array $args) {
 			$body = $request->getParsedBody();
 
-			if( isset($body['shop']) AND isset($body['mark']) AND isset($body['model']) AND isset($body['template']) AND isset($body['url']) ) {
+			if( isset($body['shop']) AND isset($body['model']) AND isset($body['template']) AND isset($body['url']) ) {
 				$shop = $body['shop'];
-				$mark = $body['mark'];
 				$model = $body['model'];
 				$template = $body['template'];
 				$url = $body['url'];
@@ -25,7 +24,33 @@
 			}
 
 		    return $response->withRedirect('/');		   
-		}	
+		}
+
+        /**
+         * Пакетное добавление цен
+         */
+		public function packet_add(Request $request, Response $response, array $args) {
+            $body = $request->getParsedBody();
+
+            if( isset($body['shop']) AND isset($body['model_id']) AND isset($body['template']) AND isset($body['url']) ) {
+                $shop = $body['shop'];
+
+                $queryParts = [];
+                foreach($body['model_id'] as $key => $value) {
+                    $model_id = intval($body['model_id'][$key]);
+                    $template = ( !empty($body['template'][$key]) ) ? $body['template'][$key] : NULL;
+                    $url = $body['url'][$key];
+
+                    $queryParts[] = $this->container->db->parse("(?i, ?i, ?s, ?s, 1)", $shop, $model_id, $url, $template);
+                }
+
+                $query = "INSERT INTO price(shop_id, model_id, url, template, active) VALUES" . implode(", ", $queryParts);
+
+                $this->container->db->query($query);
+            }
+
+            return $response->withRedirect('/');
+        }
 
 		/**
 		* Редактирование цены
