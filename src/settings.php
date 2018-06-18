@@ -24,8 +24,14 @@ return [
         ],
 
         'auth' => [
-            'user' => 'admin',
-            'pass' => 'admin'
+            'admin' => 'admin',
+            'pingvin' => 'wnfnxo65',
+            'krolik' => 'ifhqbsta',
+            'panda' => 'jyl14aok',
+            'enot' => 'oa7zp5k6',
+            'medved' => 'tb0ejbmc',
+            'lisa' => 'stcr2q19',
+            'jiraf' => 'yptqz3mj'
         ],
 
         'migration' => [

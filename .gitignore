@@ -6,3 +6,4 @@ composer.lock
 /carprice.com/
 .env
 /res/
+.idea/

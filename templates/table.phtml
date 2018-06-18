@@ -51,7 +51,9 @@
                         <th>Марка</th>
                         <th>Модель</th>
                         <?php foreach($shop as $value) { ?>
-                            <th><?php echo $value['name']; ?></th>
+                            <th>
+                                <?php echo $value['name']; ?>
+                            </th>
                         <?php } ?>                        
                     </tr>
                 </thead>
@@ -121,6 +123,8 @@
 
 <script type="text/javascript">
     (function() {
+        $('[data-toggle="tooltip"]').tooltip();
+        
         $(document).ready(function () {
             setTableBody();
             $(window).resize(setTableBody);

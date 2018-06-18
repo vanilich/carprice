@@ -14,10 +14,12 @@
 			if( isset($body['login']) AND isset($body['password']) ) {
 				$login = trim($body['login']);
 				$password = trim($body['password']);
+				
+				$auth = $this->container->get('settings')['auth'];
 
-				if($login === $this->container->get('settings')['auth']['user'] AND $password === $this->container->get('settings')['auth']['pass']) {
+				if( isset($auth[$login]) AND $password ===  $auth[$login] ) {
 					$_SESSION['auth'] = true;
-					return $response->withRedirect('/');
+					return $response->withRedirect('/');					
 				} else {
 					return $response->withRedirect('/login');
 				}

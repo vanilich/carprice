@@ -4,6 +4,9 @@
 
     /**
     * Обновление цен на сайт
+     *  Параметры:
+     *      shop_id=1   // Id Магазина
+     *      time=false  // Отключить интервал
     **/
     class RefreshPriceTask extends BaseTask {
 
@@ -26,6 +29,24 @@
         }
 
         public function command($args) {
+            $params = [];
+            // Перебираем входные аргументы
+            foreach ($args as $value) {
+                // Пробел - разделитель
+                $tmp = @explode("=", $value);
+
+                // Получаем имя и значение аргументов
+                $paramName = $tmp[0];
+                $paramValue = $tmp[1];
+
+                if(!$paramName OR !$paramValue) {
+                    die("Unknown params \n");
+                }
+
+                // Положим их в массив
+                $params[$paramName] = $paramValue;
+            }
+
             $query = "";
             $query .= "SELECT ";
             $query .= "    price.id, ";
@@ -39,8 +60,19 @@
             $query .= "    INNER JOIN shop ON ";
             $query .= "        price.active = 1 AND ";
             $query .= "        price.shop_id = shop.id AND ";
-            $query .= "        price.updated_at < NOW() - INTERVAL '180' MINUTE ";
-            $query .= "LIMIT 30;";
+
+            // Если передали ID Магазина
+            if( isset($params['shop_id']) ) {
+                $query .= $this->container->db->parse("price.shop_id = ?i AND ", $params['shop_id']);
+            }
+
+            // Отключаем проверку по интервалу
+            if( isset($params['time']) AND $params['time'] == 'false' ) {
+                $query .= "        1 "; // null query
+            } else {
+                $query .= "        price.updated_at < NOW() - INTERVAL '300' MINUTE ";
+            }
+            $query .= "ORDER BY price.updated_at ASC LIMIT 100;";
 
             // Получаем данные из бд с списком не актуальных цен
             $result = $this->container->db->getAll($query);

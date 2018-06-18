@@ -85,6 +85,11 @@
                         <i class="fas fa-plus"></i>
                          Добавить ссылку на цену
                     </button>
+
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal3">
+                        <i class="fab fa-stack-overflow"></i>
+                        Пакетное добавление цен
+                    </button>
                 </div>
                 <div class="col-md-6 text-right">
                     <a href="#" class="btn btn-success js-excel-open" data-loading-text="Загрузка...">
@@ -185,7 +190,7 @@
                                     <option disabled selected></option>
                                     <?php foreach($mark as $item) { ?>
                                         <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
-                                    <?php } ?>                                    
+                                    <?php } ?>
                                 </select>
                             </div>
 
@@ -216,7 +221,92 @@
             </div>
         </div>
 
+        <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Пакетное добавление ссылкок на цены</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="/price/packet_add">
+                            <div class="form-group">
+                                <label>Автосалон</label>
+                                <select class="form-control js-select-shop" required name="shop">
+                                    <option disabled selected></option>
+                                    <?php foreach($shop as $item) { ?>
+                                        <option value="<?php echo $item['shop_id']; ?>"><?php echo $item['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Шаблон из автосалона</label>
+                                <input type="text" class="form-control" id="js-add-price-parent-tempalte" disabled name="parent_template">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Марка автомобиля</label>
+                                <select class="form-control js-select-mark-1 js-select-mark-pack" required name="mark">
+                                    <option disabled selected></option>
+                                    <?php foreach($mark as $item) { ?>
+                                        <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Модель автомобиля</label>
+                                <select class="form-control js-select-model-1 js-select-model-pack" required>
+                                    <option disabled selected></option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <table class="table table-striped js-price-pack-container">
+                                    <thead>
+                                        <tr>
+                                            <th>Автомобиль</th>
+                                            <th>Ссылка на цену</th>
+                                            <th>Шаблон</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <?php echo $this->fetch('footer.phtml'); ?>
+
+        <script type="text-template" id="js-row-packet-template">
+            <tr>
+                <input type="hidden" name="model_id[]" value="">
+                <td>
+                    <input name="model" class="form-control" value="" disabled>
+                </td>
+                <td>
+                    <input type="url" name="url[]" class="form-control" required>
+                </td>
+                <td>
+                    <input type="text" name="template[]" class="form-control">
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger js-remove-pack-row">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+        </script>
 
         <script type="text/javascript">
             (function() {
@@ -353,11 +443,12 @@
 
                     window.data['mark'] = id;
 
-                    var str = '';
                     $.ajax({
                         method: 'GET',
                         url: 'model/' + id,
                         success: function(data) {
+                            var str = '<option disabled selected></option>';
+
                             for(var item in data) {
                                 $('.js-select-model-1').html('');
 
@@ -437,6 +528,34 @@
                             $(self).attr('disabled', false);
                         }
                     })
+                });
+
+                // Пакетное добавление цен
+                $('#myModal3').on('shown.bs.modal', function (event) {
+
+                });
+
+                // Действие при выборе марки авто в модалке  "Пакетное добавление цен"
+                $('.js-select-mark-pack').change(function() {
+                    $('.js-price-pack-container tbody').html('');
+                });
+
+                // Действие при выборе модели авто в модалке "Пакетное добавление цен"
+                $('.js-select-model-pack').change(function() {
+                    var row = $( $('#js-row-packet-template').html() );
+
+                    // Заполняем данные input's
+                    $(row).find('input[name="model_id[]"]').val( $(this).val() );
+                    $(row).find('input[name="model"]').val( $("option:selected", this)[0].outerText );
+
+                    $('.js-price-pack-container tbody').append(row);
+                });
+
+                // Удалить строку с ценой
+                $(document).on('click', '.js-remove-pack-row', function(event) {
+                    event.preventDefault();
+
+                    $(this).parents('tr').remove();
                 });
             })();            
         </script>
