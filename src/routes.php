@@ -41,6 +41,7 @@
 
 		// Работа с ценами
 		$this->post('/price/add', 		 \PriceController::class . ':add');
+        $this->post('/price/packet_add', \PriceController::class . ':packet_add');
 		$this->post('/price/edit', 		 \PriceController::class . ':edit');
 		$this->get('/price/remove/{id}', \PriceController::class . ':remove');
 		$this->post('/price/test', 		 \PriceController::class . ':test');
