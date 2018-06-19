@@ -4,6 +4,13 @@
 
 	class PriceModel extends BaseModel {
 
+	    // Хост найден, парсинг работает и цена отображается (Зеленый)
+	    const PRICE_SUCCESS = 1;
+	    // Хост найден, но цена не парсится (Желтый)
+	    const PRICE_WARNING = 2;
+        // Хост не найден (Красный)
+        const PRICE_ERROR = 3;
+
 		/**
 		* Генерируем таблицу с ценами
 		* @param int $mark ID марки автомобиля
@@ -125,4 +132,25 @@
 
 		    return $data;
 		}
+
+		/**
+         * Установить цену
+         * @param $level integer Уровень ошибки. См. const PRICE_xxx...
+         * @param $id int ID цены
+         * @param $price int Значение цены
+         * @return void
+         */
+		public function updatePrice($level, $id, $price = NULL) {
+		    if($level === PriceModel::PRICE_SUCCESS) {
+                $this->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=?i WHERE id=?i", $price, PriceModel::PRICE_SUCCESS, $id);
+            }
+
+            if($level === PriceModel::PRICE_WARNING) {
+                $this->db->query("UPDATE price SET price=NULL, updated_at='2010-01-01 16:32:33', active=?i WHERE id=?i", PriceModel::PRICE_WARNING, $id);
+            }
+
+            if($level === PriceModel::PRICE_ERROR) {
+                $this->db->query("UPDATE price SET price=NULL, updated_at='2010-01-01 16:32:33'), active=?i WHERE id=?i", PriceModel::PRICE_ERROR, $id);
+            }
+        }
 	}
