@@ -20,7 +20,7 @@
 		    $query .= " 	model.name as 'model_name', ";
 		    $query .= " 	mark.name as 'mark_name' ";
 		    $query .= "FROM model  ";
-		    $query .= "		INNER JOIN mark ON model.mark_id = mark.id";
+		    $query .= "		INNER JOIN mark ON model.mark_id = mark.id ";
 
 		    // Фильтруем данные по "марке" и "модели" автомобиля
 		    if( isset($mark) AND !empty($mark) AND $mark !== 0 ) {
@@ -29,6 +29,9 @@
 		    if( isset($model) AND !empty($model) AND $model !== 0 ) {
 		    	$query .= $this->db->parse(" AND model.id = ?i", $model);
 		    }
+
+		    $query .= "ORDER BY mark.name, model.name";
+
 		    $cars  = $this->db->getAll($query);
 		    // ------------------------------------------------
 
