@@ -4,12 +4,13 @@
 
 	class PriceModel extends BaseModel {
 
+	    // price.active field
 	    // Хост найден, парсинг работает и цена отображается (Зеленый)
 	    const PRICE_SUCCESS = 1;
 	    // Хост найден, но цена не парсится (Желтый)
-	    const PRICE_WARNING = 2;
+	    const DOM_ENTITY_NOT_FOUND = 2;
         // Хост не найден (Красный)
-        const PRICE_ERROR = 3;
+        const HOST_NOT_FOUND = 3;
 
 		/**
 		* Генерируем таблицу с ценами
@@ -76,7 +77,11 @@
 
 
 		/**
-		* Парсим цену с стороннего сайта
+		* Парсим цену с стороннего сайта\
+        * @param $url string Ссылка на цену
+        * @param @template string Наблон парсинга цены
+        * @throws \PriceException Если не удается найти хост, шаблон или цену
+        * @return bool
 		**/
 		public static function parse($url, $template) {
 			// Проверяем ссылку на доступность
@@ -93,10 +98,15 @@
                         $price = preg_replace("/[^0-9]/", '', $price);
 
                         return $price;
+                    } else {
+                        throw new \PriceException(PriceModel::DOM_ENTITY_NOT_FOUND);
                     }
-				}
-			}
-			return false;
+                } else {
+                    throw new \PriceException(PriceModel::DOM_ENTITY_NOT_FOUND);
+                }
+			} else {
+			    throw new \PriceException(PriceModel::HOST_NOT_FOUND);
+            }
 		}
 
 		/**
@@ -136,21 +146,26 @@
 		/**
          * Установить цену
          * @param $level integer Уровень ошибки. См. const PRICE_xxx...
-         * @param $id int ID цены
-         * @param $price int Значение цены
+         * @param $id integer ID цены
+         * @param $price integer Значение цены
+         * @param $tempalate string Шаблон для поиска цены
          * @return void
          */
-		public function updatePrice($level, $id, $price = NULL) {
+		public function updatePrice($level, $id, $price = NULL, $tempalate = NULL) {
 		    if($level === PriceModel::PRICE_SUCCESS) {
-                $this->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=?i WHERE id=?i", $price, PriceModel::PRICE_SUCCESS, $id);
+		        if($tempalate != NULL) {
+                    $this->db->query("UPDATE price SET template=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $tempalate, $price, PriceModel::PRICE_SUCCESS, $id);
+                } else {
+                    $this->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=?i WHERE id=?i", $price, PriceModel::PRICE_SUCCESS, $id);
+                }
             }
 
-            if($level === PriceModel::PRICE_WARNING) {
-                $this->db->query("UPDATE price SET price=NULL, updated_at='2010-01-01 16:32:33', active=?i WHERE id=?i", PriceModel::PRICE_WARNING, $id);
+            if($level === PriceModel::DOM_ENTITY_NOT_FOUND) {
+                $this->db->query("UPDATE price SET price=NULL, updated_at='2010-01-01 16:32:33', active=?i WHERE id=?i", PriceModel::DOM_ENTITY_NOT_FOUND, $id);
             }
 
-            if($level === PriceModel::PRICE_ERROR) {
-                $this->db->query("UPDATE price SET price=NULL, updated_at='2010-01-01 16:32:33'), active=?i WHERE id=?i", PriceModel::PRICE_ERROR, $id);
+            if($level === PriceModel::HOST_NOT_FOUND) {
+                $this->db->query("UPDATE price SET price=NULL, updated_at='2010-01-01 16:32:33'), active=?i WHERE id=?i", PriceModel::HOST_NOT_FOUND, $id);
             }
         }
 	}

@@ -86,6 +86,7 @@
 
 		/**
 		* Тест шаблона для поиска цены
+        * @return Slim\Http\Response;
 		**/
 		public function test(Request $request, Response $response, array $args) {
 			$body = $request->getParsedBody();
@@ -101,17 +102,33 @@
 					$template = $this->container->db->getOne('SELECT shop.template FROM price INNER JOIN shop ON price.id = ?i AND price.shop_id = shop.id LIMIT 1', $id);
 				}
 
-				// Парсим цену с сайта
-				if( ($price = PriceModel::parse($url, $template)) !== false ) {
+				// Создаем модель для цены
+				$priceModel = new PriceModel($this->container->db);
 
-					$this->container->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=1 WHERE id=?i", $price, $id);
+				try {
+				    // Парсим цену сайта
+                    $price = PriceModel::parse($url, $template);
 
-					return $response->withJson( ['price' => $price] );	
-				} else {
-					return $response->withJson( ['price' => ''] );	
-				}
+                    // Обновляем новое значение цены
+                    $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $price);
+
+                    return $response->withJson( ['price' => $price] );
+                } catch(\PriceException $exp) {
+				    // Если такой DOM элемент не найден на странице
+				    if($exp->getLevel() == PriceModel::DOM_ENTITY_NOT_FOUND) {
+				        $priceModel->updatePrice(PriceModel::DOM_ENTITY_NOT_FOUND, $id);
+                    }
+
+                    // Если хост с ценой не найден
+                    if($exp->getLevel() == PriceModel::HOST_NOT_FOUND) {
+                        $priceModel->updatePrice(PriceModel::HOST_NOT_FOUND, $id);
+                    }
+                } catch(\Exception $exp) {
+
+                }
+
+                return $response->withJson( ['price' => ''] );
 			}
-
 		}
 
         /**
