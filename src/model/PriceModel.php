@@ -30,6 +30,7 @@
 		    	$query .= $this->db->parse(" AND model.id = ?i", $model);
 		    }
 
+		    // Добавил сортировку по названию марки и модели автомобиля
 		    $query .= "ORDER BY mark.name, model.name";
 
 		    $cars  = $this->db->getAll($query);
