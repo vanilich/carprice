@@ -24,10 +24,10 @@
 
 		    // Фильтруем данные по "марке" и "модели" автомобиля
 		    if( isset($mark) AND !empty($mark) AND $mark !== 0 ) {
-		    	$query .= $this->db->parse(" AND model.mark_id = ?i", $mark);
+		    	$query .= $this->db->parse(" AND model.mark_id = ?i ", $mark);
 		    }
 		    if( isset($model) AND !empty($model) AND $model !== 0 ) {
-		    	$query .= $this->db->parse(" AND model.id = ?i", $model);
+		    	$query .= $this->db->parse(" AND model.id = ?i ", $model);
 		    }
 
 		    // Добавил сортировку по названию марки и модели автомобиля
