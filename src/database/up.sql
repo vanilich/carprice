@@ -49,7 +49,7 @@ CREATE TABLE `price` (
   `url` varchar(256) NOT NULL,
   `template` varchar(256) DEFAULT NULL,
   `price` bigint(20) DEFAULT NULL,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `updated_at` datetime NOT NULL DEFAULT '2010-01-01 16:32:33'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
