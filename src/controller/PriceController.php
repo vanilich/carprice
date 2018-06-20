@@ -17,9 +17,9 @@
 				$url = $body['url'];
 
 				if( !empty($template) ) {
-					$this->container->db->query('INSERT INTO price(updated_at, shop_id, model_id, url, template, active) VALUES("2010-01-01 16:32:33", ?i, ?i, ?s, ?s, 1)', $shop, $model, $url, $template);
+					$this->container->db->query('INSERT INTO price(updated_at, shop_id, model_id, url, template, active) VALUES("2010-01-01 16:32:33", ?i, ?i, ?s, ?s, 0)', $shop, $model, $url, $template);
 				} else {
-					$this->container->db->query('INSERT INTO price(updated_at, shop_id, model_id, url, active) VALUES("2010-01-01 16:32:33", ?i, ?i, ?s, 1)', $shop, $model, $url);
+					$this->container->db->query('INSERT INTO price(updated_at, shop_id, model_id, url, active) VALUES("2010-01-01 16:32:33", ?i, ?i, ?s, 0)', $shop, $model, $url);
 				}	
 			}
 
@@ -41,7 +41,7 @@
                     $template = ( !empty($body['template'][$key]) ) ? $body['template'][$key] : NULL;
                     $url = $body['url'][$key];
 
-                    $queryParts[] = $this->container->db->parse("('2010-01-01 16:32:33', ?i, ?i, ?s, ?s, 1)", $shop, $model_id, $url, $template);
+                    $queryParts[] = $this->container->db->parse("('2010-01-01 16:32:33', ?i, ?i, ?s, ?s, 0)", $shop, $model_id, $url, $template);
                 }
 
                 $query = "INSERT INTO price(updated_at, shop_id, model_id, url, template, active) VALUES" . implode(", ", $queryParts);
@@ -64,9 +64,9 @@
 				$template = $body['template'];
 
 				if( !empty($template) ) {
-					$this->container->db->query('UPDATE price SET url=?s, template=?s, active=1 WHERE id=?i', $url, $template, $id);
+					$this->container->db->query('UPDATE price SET url=?s, template=?s, active=0 WHERE id=?i', $url, $template, $id);
 				} else {
-					$this->container->db->query('UPDATE price SET url=?s, active=1 WHERE id=?i', $url, $id);
+					$this->container->db->query('UPDATE price SET url=?s, active=0 WHERE id=?i', $url, $id);
 				}
 			}	
 			
@@ -86,6 +86,7 @@
 
 		/**
 		* Тест шаблона для поиска цены
+        * @return Slim\Http\Response;
 		**/
 		public function test(Request $request, Response $response, array $args) {
 			$body = $request->getParsedBody();
@@ -96,22 +97,42 @@
 				$template = $body['template'];
 
 				// Если пользователь не заполнил поле с шаблоном, то:
-				if( empty($template) ) {
+				if( empty($body['template']) ) {
 					// Получаем родительский класс шаблона (таблица shop) для поиска цена
 					$template = $this->container->db->getOne('SELECT shop.template FROM price INNER JOIN shop ON price.id = ?i AND price.shop_id = shop.id LIMIT 1', $id);
 				}
 
-				// Парсим цену с сайта
-				if( ($price = PriceModel::parse($url, $template)) !== false ) {
+				// Создаем модель для цены
+				$priceModel = new PriceModel($this->container->db);
 
-					$this->container->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=1 WHERE id=?i", $price, $id);
+				try {
+				    // Парсим цену сайта
+                    $price = $priceModel->parse($url, $template);
 
-					return $response->withJson( ['price' => $price] );	
-				} else {
-					return $response->withJson( ['price' => ''] );	
-				}
+                    if( !empty($body['template']) ) {
+                        // Обновляем новое значение цены
+                        $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $price, $template);
+                    } else {
+                        $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $price);
+                    }
+
+                    return $response->withJson( ['price' => $price] );
+                } catch(\PriceException $exp) {
+				    // Если такой DOM элемент не найден на странице
+				    if($exp->getLevel() == PriceModel::DOM_ENTITY_NOT_FOUND) {
+				        $priceModel->updatePrice(PriceModel::DOM_ENTITY_NOT_FOUND, $id);
+                    }
+
+                    // Если хост с ценой не найден
+                    if($exp->getLevel() == PriceModel::HOST_NOT_FOUND) {
+                        $priceModel->updatePrice(PriceModel::HOST_NOT_FOUND, $id);
+                    }
+                } catch(\Exception $exp) {
+
+                }
+
+                return $response->withJson( ['price' => ''] );
 			}
-
 		}
 
         /**
@@ -128,37 +149,4 @@
                 return $response->withJson($result);
             }
         }
-
-        /**
-         * Обновление цены
-         */
-        public function refresh(Request $request, Response $response, array $args) {
-            $body = $request->getParsedBody();
-
-            if( isset($body['id']) ) {
-                $id = intval($body['id']);
-
-                $priceModel = new PriceModel($this->container->db);
-
-                $result = $priceModel->getPriceWithParentShopTempalte($id);
-
-                $id = $result['id'];
-                $url = $result['url'];
-                $template = !empty($result['template']) ? $result['template'] : $result['parent_template'];
-
-                if( ($price = PriceModel::parse($url, $template)) !== false ) {
-
-                    if( !empty($result['template']) ) {
-                        $this->container->db->query("UPDATE price SET template=?s, price=?i, updated_at=NOW(), active=1 WHERE id=?i", $template, $price, $id);
-                    } else {
-                        $this->container->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=1 WHERE id=?i", $price, $id);
-                    }
-
-                    return $response->withJson( ['status' => 'ok'] );
-                } else {
-                    return $response->withJson( ['status' => 'error'] );
-                }
-            }
-        }
-
 	}

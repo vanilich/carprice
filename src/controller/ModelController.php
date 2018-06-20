@@ -10,7 +10,7 @@
 		public function get(Request $request, Response $response, array $args) {
 			$id = intval($request->getAttribute('id'));
 
-		    $model = $this->container->db->getAll('SELECT * FROM model WHERE mark_id=?i', $id);
+		    $model = $this->container->db->getAll('SELECT * FROM model WHERE mark_id=?i ORDER BY name', $id);
 
 		    if($model) {
 		    	return $response->withJson($model);
