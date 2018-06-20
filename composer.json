@@ -18,7 +18,7 @@
         "monolog/monolog": "^1.17",
         "colshrapnel/safemysql": "^1.0",
         "adrianfalleiro/slim-cli-runner": "2.4",
-        "sunra/php-simple-html-dom-parser": "^1.5",
+        "sunra/php-simple-html-dom-parser": "1.5.2",
         "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
