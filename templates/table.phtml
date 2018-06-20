@@ -3,74 +3,116 @@
         <div class="table-header">
             <table>
                 <thead>
-                    <tr>
-                        <th>Марка</th>
-                        <th>Модель</th>
-                        <?php foreach($shop as $value) { ?>
-                            <th>
-                                <?php echo $value['name']; ?>
-                            </th>
-                        <?php } ?>                        
-                    </tr>
+                <tr>
+                    <th>Марка</th>
+                    <th>Модель</th>
+                    <?php foreach($shop as $value) { ?>
+                        <th>
+                            <?php echo $value['name']; ?>
+                        </th>
+                    <?php } ?>
+                </tr>
                 </thead>
             </table>
         </div>
         <div class="table-body">
             <table>
                 <tbody>
-                    <?php foreach ($data as $key => $value) { ?>
-                        <tr>
-                            <td><?php echo $value['mark_name']; ?></td>
-                            <td><?php echo $value['model_name']; ?></td>
+                <?php foreach ($data as $key => $value) { ?>
+                    <tr>
+                        <td><?php echo $value['mark_name']; ?></td>
+                        <td><?php echo $value['model_name']; ?></td>
 
-                            <?php foreach($value['shop'] as $value) { ?>
-                                <?php if( isset($value['price']) ) { ?>
-                                    <?php if( !empty($value['price']['price']) AND $value['price']['price'] != 0 ) { ?>
-                                        <td style="background-color: #abffab;">
-                                            <div class="price-item">
-                                                <a href="#" 
-                                                data-url="<?php echo $value['price']['url']; ?>" 
-                                                data-parent-template="<?php echo $value['price']['parent_template']; ?>"
-                                                data-template="<?php echo $value['price']['template']; ?>" 
-                                                data-id="<?php echo $value['price']['id']; ?>" 
-                                                data-toggle="modal" 
-                                                data-target="#myModal2"
-                                                data-remove-url="/price/remove/<?php echo $value['price']['id']; ?>"
-                                                >
-                                                    <?php echo number_format($value['price']['price'], 0, '', ' '); ?>
-                                                </a>
-                                                <span class="updated-at">
-                                                    <small><?php echo substr( $value['price']['updated_at'], 0, strpos($value['price']['updated_at'], ' ') ); ?></small>
-                                                </span>
-                                            </div>
-                                        </td>           
-                                    <?php } else { ?>
-                                        <td style="background-color: #fbd736;">
-                                            <div class="price-item">
-                                                <a href="#" 
-                                                data-url="<?php echo $value['price']['url']; ?>" 
-                                                data-parent-template="<?php echo $value['price']['parent_template']; ?>"
-                                                data-template="<?php echo $value['price']['template']; ?>" 
-                                                data-id="<?php echo $value['price']['id']; ?>" 
-                                                data-toggle="modal" 
-                                                data-target="#myModal2"
-                                                data-remove-url="/price/remove/<?php echo $value['price']['id']; ?>"
-                                                >
-                                                    Нет данных
-                                                </a>
-                                            </div>
-                                        </td>
-                                    <?php } ?>
-                                <?php } else { ?>
-                                    <td>
+                        <?php foreach($value['shop'] as $value) { ?>
+                            <?php if( isset($value['price']) ) { ?>
+
+                                <?php if( $value['price']['active'] == '0' ) { ?>
+                                    <td style="background-color: #d6d5d5;">
                                         <div class="price-item">
-                                            -
+                                            <a href="#"
+                                               data-url="<?php echo $value['price']['url']; ?>"
+                                               data-parent-template="<?php echo $value['price']['parent_template']; ?>"
+                                               data-template="<?php echo $value['price']['template']; ?>"
+                                               data-id="<?php echo $value['price']['id']; ?>"
+                                               data-toggle="modal"
+                                               data-target="#myModal2"
+                                               data-remove-url="/price/remove/<?php echo $value['price']['id']; ?>"
+                                            >
+                                                Цена не обновлялась
+                                            </a>
                                         </div>
                                     </td>
                                 <?php } ?>
+
+                                <?php if( $value['price']['active'] == '1' ) { ?>
+                                    <td style="background-color: #abffab;">
+                                        <div class="price-item">
+                                            <a href="#"
+                                               data-url="<?php echo $value['price']['url']; ?>"
+                                               data-parent-template="<?php echo $value['price']['parent_template']; ?>"
+                                               data-template="<?php echo $value['price']['template']; ?>"
+                                               data-id="<?php echo $value['price']['id']; ?>"
+                                               data-toggle="modal"
+                                               data-target="#myModal2"
+                                               data-remove-url="/price/remove/<?php echo $value['price']['id']; ?>"
+                                            >
+                                                <?php echo number_format($value['price']['price'], 0, '', ' '); ?>
+                                            </a>
+                                            <span class="updated-at">
+                                                <small>
+                                                    <?php echo substr( $value['price']['updated_at'], 0, strpos($value['price']['updated_at'], ' ') ); ?>
+                                                </small>
+                                            </span>
+                                        </div>
+                                    </td>
+                                <?php } ?>
+
+                                <?php if( $value['price']['active'] == '2' ) { ?>
+                                    <td style="background-color: #fbd736;">
+                                        <div class="price-item">
+                                            <a href="#"
+                                               data-url="<?php echo $value['price']['url']; ?>"
+                                               data-parent-template="<?php echo $value['price']['parent_template']; ?>"
+                                               data-template="<?php echo $value['price']['template']; ?>"
+                                               data-id="<?php echo $value['price']['id']; ?>"
+                                               data-toggle="modal"
+                                               data-target="#myModal2"
+                                               data-remove-url="/price/remove/<?php echo $value['price']['id']; ?>"
+                                            >
+                                                Неправильный шаблон
+                                            </a>
+                                        </div>
+                                    </td>
+                                <?php } ?>
+
+                                <?php if( $value['price']['active'] == '3' ) { ?>
+                                    <td style="background-color: #ff8758;">
+                                        <div class="price-item">
+                                            <a href="#"
+                                               data-url="<?php echo $value['price']['url']; ?>"
+                                               data-parent-template="<?php echo $value['price']['parent_template']; ?>"
+                                               data-template="<?php echo $value['price']['template']; ?>"
+                                               data-id="<?php echo $value['price']['id']; ?>"
+                                               data-toggle="modal"
+                                               data-target="#myModal2"
+                                               data-remove-url="/price/remove/<?php echo $value['price']['id']; ?>"
+                                            >
+                                                Страница не найдена
+                                            </a>
+                                        </div>
+                                    </td>
+                                <?php } ?>
+
+                            <?php } else { ?>
+                                <td>
+                                    <div class="price-item">
+                                        -
+                                    </div>
+                                </td>
                             <?php } ?>
-                        </tr>
-                    <?php } ?>
+                        <?php } ?>
+                    </tr>
+                <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -80,13 +122,13 @@
 <script type="text/javascript">
     (function() {
         $('[data-toggle="tooltip"]').tooltip();
-        
+
         $(document).ready(function () {
             setTableBody();
             $(window).resize(setTableBody);
 
             $(".table-body").scroll(function () {
-                $(".table-header").offset({ 
+                $(".table-header").offset({
                     left: -1*this.scrollLeft+15
                 });
             });

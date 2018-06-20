@@ -5,6 +5,8 @@
 	class PriceModel extends BaseModel {
 
 	    // price.active field
+        // Пока цена не обновлена
+        const PRICE_NOT_UPDATED = 0;
 	    // Хост найден, парсинг работает и цена отображается (Зеленый)
 	    const PRICE_SUCCESS = 1;
 	    // Хост найден, но цена не парсится (Желтый)
@@ -186,8 +188,8 @@
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_ENCODING       => "",
                 CURLOPT_AUTOREFERER    => true,
-                CURLOPT_CONNECTTIMEOUT => 5,
-                CURLOPT_TIMEOUT        => 5,
+                CURLOPT_CONNECTTIMEOUT => 3,
+                CURLOPT_TIMEOUT        => 3,
                 CURLOPT_MAXREDIRS      => 10,
             );
 

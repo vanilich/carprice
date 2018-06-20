@@ -45,7 +45,7 @@ CREATE TABLE `price` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
   `model_id` int(11) NOT NULL,
-  `active` tinyint(4) DEFAULT '1',
+  `active` tinyint(4) DEFAULT 0,
   `url` varchar(256) NOT NULL,
   `template` varchar(256) DEFAULT NULL,
   `price` bigint(20) DEFAULT NULL,

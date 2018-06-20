@@ -46,5 +46,4 @@
 		$this->get('/price/remove/{id}', \PriceController::class . ':remove');
 		$this->post('/price/test', 		 \PriceController::class . ':test');
         $this->post('/price/get', 		 \PriceController::class . ':get');
-        $this->post('/price/refresh', 	 \PriceController::class . ':refresh');
 	})->add( new AuthMiddleware() );
