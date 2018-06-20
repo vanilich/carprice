@@ -151,10 +151,10 @@
          * @param $tempalate string Шаблон для поиска цены
          * @return void
          */
-		public function updatePrice($level, $id, $price = NULL, $tempalate = NULL) {
+		public function updatePrice($level, $id, $price = NULL, $template = NULL) {
 		    if($level === PriceModel::PRICE_SUCCESS) {
 		        if($tempalate != NULL) {
-                    $this->db->query("UPDATE price SET template=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $tempalate, $price, PriceModel::PRICE_SUCCESS, $id);
+                    $this->db->query("UPDATE price SET template=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $template, $price, PriceModel::PRICE_SUCCESS, $id);
                 } else {
                     $this->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=?i WHERE id=?i", $price, PriceModel::PRICE_SUCCESS, $id);
                 }
