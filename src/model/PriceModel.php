@@ -176,7 +176,7 @@
             }
         }
 
-        protected static function getWebPage($url) {
+        public static function getWebPage($url) {
             $user_agent='Mozilla/5.0 (Windows NT 6.1; rv:8.0) Gecko/20100101 Firefox/8.0';
 
             $options = array(
@@ -191,6 +191,8 @@
                 CURLOPT_CONNECTTIMEOUT => 3,
                 CURLOPT_TIMEOUT        => 3,
                 CURLOPT_MAXREDIRS      => 10,
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => 0
             );
 
             $ch      = curl_init( $url );
