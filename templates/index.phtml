@@ -577,7 +577,8 @@
                         url: href,
 
                         success: function() {
-
+                            $('#myModal2').modal('hide');
+                            window.showMessage('Цена успешно удалена', 'default');
                         }
                     });
                 });
