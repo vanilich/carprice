@@ -55,3 +55,9 @@
             $this->get('/priceTimeout', \TestController::class . ":priceTimeout");
         });
     }
+
+    if( getenv('MODE') === 'dev' ) {
+	    $app->group('/dev', function() {
+	        $this->get('/test', \DevController::class . ":test");
+        });
+    }
