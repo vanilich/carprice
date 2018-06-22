@@ -86,6 +86,9 @@
         * @return string Значение цены
 		**/
 		public static function parse($url, $template) {
+		    // Константа для класса HtmlDomParser
+            define('MAX_FILE_SIZE', 9999999999);
+
             // Получаем страницу с помощью Curl
             $page = PriceModel::getWebPage($url);
 

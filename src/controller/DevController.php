@@ -8,5 +8,5 @@ class DevController extends Controller {
     public function test(Request $request, Response $response, array $args) {
 
     }
-    
+
 }
