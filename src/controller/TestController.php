@@ -12,4 +12,9 @@ class TestController extends Controller {
         return $response->withStatus(404);
     }
 
+    public function priceTimeout(Request $request, Response $response, array $args) {
+        sleep(5);
+        return $this->container->renderer->render($response, 'test/price.phtml');
+    }
+
 }

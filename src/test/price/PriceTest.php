@@ -1,6 +1,9 @@
 <?php
 class PriceTest extends BaseTest {
 
+    protected $correctSelector = 'div .price';
+    protected $failSelector = '.random-selector';
+    
     /**
      * @throws PriceException
      */
@@ -8,23 +11,32 @@ class PriceTest extends BaseTest {
         $this->expectException(\PriceException::class);
         $this->expectExceptionCode(PriceModel::HOST_NOT_FOUND);
 
-        PriceModel::parse('http://parser.local/test/price404', '.random-selector');
+        PriceModel::parse('http://parser.local/test/price404', $this->failSelector);
     }
 
     /**
      * @throws PriceException
      */
     public function testEntityNotFound() {
-        $this->expectException(PriceException::class);
+        $this->expectException(\PriceException::class);
         $this->expectExceptionCode(PriceModel::DOM_ENTITY_NOT_FOUND);
 
-        PriceModel::parse('http://parser.local/test/price', '.random-selector');
+        PriceModel::parse('http://parser.local/test/price', $this->failSelector);
     }
 
+    /**
+     * @throws PriceException
+     */
+    public function testTimeoutPrice() {
+        $this->expectException(\PriceException::class);
+        $this->expectExceptionCode(PriceModel::HOST_NOT_FOUND);
+
+        PriceModel::parse('http://parser.local/test/priceTimeout', $this->correctSelector);
+    }
 
     public function testSuccessPrice() {
         try {
-            $price = PriceModel::parse('http://parser.local/test/price', 'div .price');
+            $price = PriceModel::parse('http://parser.local/test/price', $this->correctSelector);
 
             $this->assertTrue(ctype_digit($price));
             $this->assertEquals($price, "1239600323");
@@ -34,4 +46,5 @@ class PriceTest extends BaseTest {
             $this->fail($exp);
         }
     }
+
 }

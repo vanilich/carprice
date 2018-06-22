@@ -50,7 +50,8 @@
 
 	if( getenv('MODE') === 'test' ) {
 	    $app->group('/test', function() {
-	        $this->get('/price',    \TestController::class . ":price");
-            $this->get('/price404', \TestController::class . ":price404");
+	        $this->get('/price',        \TestController::class . ":price");
+            $this->get('/price404',     \TestController::class . ":price404");
+            $this->get('/priceTimeout', \TestController::class . ":priceTimeout");
         });
     }
