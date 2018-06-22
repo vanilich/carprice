@@ -124,7 +124,14 @@
 
                             <div class="form-group">
                                 <label>Ссылка</label>
-                                <input type="text" class="form-control" name="url">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="url">
+                                    <span class="input-group-btn">
+                                        <a class="btn btn-primary js-price-to-link" href="#" target="blank" data-toggle="tooltip" data-placement="bottom" title="Открыть ссылку в новом окне">
+                                            <i class="fas fa-link"></i>
+                                        </a>
+                                     </span>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -492,6 +499,7 @@
                     $('.js-show-price-form').find('input[name="template"]').val(template);
                     $('.js-show-price-form').find('.js-delete-price').attr('href', href);
                     $('.js-show-price-form').find('.js-delete-price').data('id', id);
+                    $('.js-price-to-link').attr('href', url );
 
                     $('.new-price-modal').hide();
                 }); 
@@ -581,6 +589,11 @@
                             window.showMessage('Цена успешно удалена', 'default');
                         }
                     });
+                });
+
+                // Изменение данных в ссылке на цену в модалке
+                $(document).on('input', '#myModal2 input[name="url"]', function() {
+                    $('.js-price-to-link').attr('href', $(this).val() );
                 });
             })();            
         </script>
