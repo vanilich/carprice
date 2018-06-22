@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/main.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-4 col-md-4">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <form class="well" method="POST" action="/login">
+                        <div class="form-group">
+                            <legend>Форма авторизации</legend>
+                        </div>
+                        <div class="form-group">
+                            <label>Логин:</label>
+                            <input type="text" name="login" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль:</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div> 
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Войти</button>
+                        </div>                                               
+                    </form>
+                </div>               
+            </div>
+        </div>
+
+        <script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>    </body>
+</html>

@@ -47,3 +47,10 @@
 		$this->post('/price/test', 		 \PriceController::class . ':test');
         $this->post('/price/get', 		 \PriceController::class . ':get');
 	})->add( new AuthMiddleware() );
+
+	if( getenv('MODE') === 'test' ) {
+	    $app->group('/test', function() {
+	        $this->get('/price',    \TestController::class . ":price");
+            $this->get('/price404', \TestController::class . ":price404");
+        });
+    }

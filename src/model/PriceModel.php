@@ -83,7 +83,7 @@
         * @param $url string Ссылка на цену
         * @param @template string Наблон парсинга цены
         * @throws \PriceException Если не удается найти хост, шаблон или цену
-        * @return bool
+        * @return string Значение цены
 		**/
 		public static function parse($url, $template) {
             // Получаем страницу с помощью Curl
@@ -103,6 +103,7 @@
                         // Удаляем из цены html тэги и оставляем только цифры
                         $price = strip_tags($price);
                         $price = preg_replace("/[^0-9]/", '', $price);
+                        $price = str_replace(' ', '', $price);
 
                         return $price;
                     } else {
