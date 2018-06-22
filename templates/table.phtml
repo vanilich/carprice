@@ -46,7 +46,7 @@
 
                                 <?php if( $value['price']['active'] == '1' ) { ?>
                                     <td style="background-color: #abffab;">
-                                        <div class="price-item">
+                                        <div class="price-item" id="js-price-<?php echo $value['price']['id']; ?>">
                                             <a href="#"
                                                data-url="<?php echo $value['price']['url']; ?>"
                                                data-parent-template="<?php echo $value['price']['parent_template']; ?>"
@@ -69,7 +69,7 @@
 
                                 <?php if( $value['price']['active'] == '2' ) { ?>
                                     <td style="background-color: #fbd736;">
-                                        <div class="price-item">
+                                        <div class="price-item" id="js-price-<?php echo $value['price']['id']; ?>">
                                             <a href="#"
                                                data-url="<?php echo $value['price']['url']; ?>"
                                                data-parent-template="<?php echo $value['price']['parent_template']; ?>"
@@ -87,7 +87,7 @@
 
                                 <?php if( $value['price']['active'] == '3' ) { ?>
                                     <td style="background-color: #ff8758;">
-                                        <div class="price-item">
+                                        <div class="price-item" id="js-price-<?php echo $value['price']['id']; ?>">
                                             <a href="#"
                                                data-url="<?php echo $value['price']['url']; ?>"
                                                data-parent-template="<?php echo $value['price']['parent_template']; ?>"

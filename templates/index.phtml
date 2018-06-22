@@ -491,6 +491,7 @@
                     $('.js-show-price-form').find('input[name="id"]').val(id);
                     $('.js-show-price-form').find('input[name="template"]').val(template);
                     $('.js-show-price-form').find('.js-delete-price').attr('href', href);
+                    $('.js-show-price-form').find('.js-delete-price').data('id', id);
 
                     $('.new-price-modal').hide();
                 }); 
@@ -556,6 +557,29 @@
                     event.preventDefault();
 
                     $(this).parents('tr').remove();
+                });
+
+                // Удалить цену
+                $(document).on('click', '.js-delete-price', function(event) {
+                    event.preventDefault();
+
+                    // Ссылка на action удаления цены
+                    var href = $(this).attr('href');
+                    // ID Цены
+                    var id = $(this).data('id');
+                    // Ссылка на DOM элемент с ценой (клетка таблицы)
+                    var priceCell = $('#js-price-' + id);
+
+                    // Удаляем цену и стили клетки таблицы
+                    $(priceCell).text('-').parents('td').removeAttr('style');
+
+                    $.get({
+                        url: href,
+
+                        success: function() {
+
+                        }
+                    });
                 });
             })();            
         </script>

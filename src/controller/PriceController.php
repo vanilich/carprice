@@ -81,7 +81,7 @@
 
 			$this->container->db->query('DELETE FROM price WHERE id=?i', $id);
 
-		    return $response->withRedirect('/');	
+            return $response->withJson( ['status' => 'ok'] );
 		}	
 
 		/**
