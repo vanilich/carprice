@@ -5,8 +5,14 @@ $container = $app->getContainer();
 
 // view renderer
 $container['renderer'] = function ($c) {
-    $settings = $c->get('settings')['renderer'];
-    return new Slim\Views\PhpRenderer($settings['template_path']);
+    $template_path = $c->get('settings')['renderer']['template_path'];
+
+    // Преобразуем std::class в array
+    $settings = (array) $c->get('settings');
+    // Извлекаем настройки по первому ключю ассоциативного массива
+    $settings['config'] = $settings[key($settings)];
+
+    return new Slim\Views\PhpRenderer($template_path, $settings['config']);
 };
 
 // monolog
