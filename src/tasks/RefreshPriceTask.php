@@ -8,6 +8,7 @@ use \Sunra\PhpSimple\HtmlDomParser;
  *      shop_id=1   // Id Магазина
  *      time=false  // Отключить интервал
  *      limit=100   // Лимит записей для обновления
+ *      active=2    // Принудительно установить статус поля 'active'
  **/
 class RefreshPriceTask extends BaseTask {
 
@@ -59,7 +60,14 @@ class RefreshPriceTask extends BaseTask {
         $query .= "    price.price ";
         $query .= "FROM price ";
         $query .= "    INNER JOIN shop ON ";
-        $query .= "        price.active IN (0, 1) AND ";
+
+        // Принудииельно устанавливаем статус
+        if( isset($params['active'])  ) {
+            $query .= $this->container->db->parse("price.active = ?i AND ", $params['active']);
+        } else {
+            $query .= "price.active IN (0, 1) AND ";
+        }
+
         $query .= "        price.shop_id = shop.id AND ";
 
         // Если передали ID Магазина
