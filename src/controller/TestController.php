@@ -13,7 +13,7 @@ class TestController extends Controller {
     }
 
     public function priceTimeout(Request $request, Response $response, array $args) {
-        sleep(5);
+        sleep(6);
         return $this->container->renderer->render($response, 'test/price.phtml');
     }
 
