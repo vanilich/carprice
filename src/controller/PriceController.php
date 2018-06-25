@@ -122,12 +122,12 @@
                 } catch(\PriceException $exp) {
 				    // Если такой DOM элемент не найден на странице
 				    if($exp->getLevel() == PriceModel::DOM_ENTITY_NOT_FOUND) {
-				        $priceModel->updatePrice(PriceModel::DOM_ENTITY_NOT_FOUND, $id);
+				        $priceModel->updatePrice(PriceModel::DOM_ENTITY_NOT_FOUND, $id, $url);
                     }
 
                     // Если хост с ценой не найден
                     if($exp->getLevel() == PriceModel::HOST_NOT_FOUND) {
-                        $priceModel->updatePrice(PriceModel::HOST_NOT_FOUND, $id);
+                        $priceModel->updatePrice(PriceModel::HOST_NOT_FOUND, $id, $url);
                     }
                 } catch(\Exception $exp) {
 
