@@ -168,7 +168,7 @@
 		        if($template != NULL) {
                     $this->db->query("UPDATE price SET url=?s, template=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $url, $template, $price, PriceModel::PRICE_SUCCESS, $id);
                 } else {
-                    $this->db->query("UPDATE price SET url=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i",  $url, $price, PriceModel::PRICE_SUCCESS, $id);
+                    $this->db->query("UPDATE price SET url=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $url, $price, PriceModel::PRICE_SUCCESS, $id);
                 }
             }
 

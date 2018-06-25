@@ -115,18 +115,18 @@ class RefreshPriceTask extends BaseTask {
                 $price = PriceModel::parse($url, $template);
 
                 // Обновляем новое значение цены
-                $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $price);
+                $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $url, $price);
                 $this->logger->info("Price with id '" . $value['id'] . "' success updated");
             } catch(\PriceException $exp) {
                 // Если такой DOM элемент не найден на странице
                 if($exp->getLevel() == PriceModel::DOM_ENTITY_NOT_FOUND) {
-                    $priceModel->updatePrice(PriceModel::DOM_ENTITY_NOT_FOUND, $id);
+                    $priceModel->updatePrice(PriceModel::DOM_ENTITY_NOT_FOUND, $id, $url);
                     $this->logger->warning("Price with id '" . $value['id'] . "' cannot find in template '" . $template . "'");
                 }
 
                 // Если хост с ценой не найден
                 if($exp->getLevel() == PriceModel::HOST_NOT_FOUND) {
-                    $priceModel->updatePrice(PriceModel::HOST_NOT_FOUND, $id);
+                    $priceModel->updatePrice(PriceModel::HOST_NOT_FOUND, $id, $url);
                     $this->logger->warning("Price with id '" . $value['id'] . "' has not 200 http response code");
                 }
             } catch(\Exception $exp) {}
