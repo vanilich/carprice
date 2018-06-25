@@ -101,8 +101,8 @@
 			$filename = 'price-' . date("Y-m-d H.i.s") . '.xls';
 			$path = 'res/' . $filename;
 
-			$objWriter = PHPExcel_IOFactory::createWriter($doc, 'Excel5');
-			$objWriter->save($path);
+			$objWriter = @PHPExcel_IOFactory::createWriter($doc, 'Excel5');
+			@$objWriter->save($path);
 
 			return $response->withJson([
 				'url' => $path
