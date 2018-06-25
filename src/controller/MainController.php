@@ -56,4 +56,8 @@
 		    	'city' => $city
 		    ]);			
 		}
+
+		public function stub(Request $request, Response $response, array $args) {
+            return $this->container->renderer->render($response, 'stub.phtml');
+        }
 	}

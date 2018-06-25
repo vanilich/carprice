@@ -1,10 +1,19 @@
 <?php
-	// Авторизация
-	$app->get('/login', 	\LoginController::class . ':login');
-	$app->post('/login', 	\LoginController::class . ':doLogin');
-	$app->any('/logout', 	\LoginController::class . ':logout');
+    // Заглушка для приложения
+    if( getenv('STUB') === '1' ) {
+        $app->add( new StubMiddleware() );
 
-	$app->group('', function() {
+        // Заглушка для приложения
+        $app->get('/stub',\MainController::class . ':stub');
+    }
+
+    $app->group('', function() {
+        $this->get('/login', 	\LoginController::class . ':login');
+        $this->post('/login', 	\LoginController::class . ':doLogin');
+        $this->any('/logout', 	\LoginController::class . ':logout');
+    })->add( new StubMiddleware() );
+
+    $app->group('', function() {
 		// Главная страница
 		$this->get('/', 		\MainController::class . ':index');
 		// Список моделей и марок автомобилей
