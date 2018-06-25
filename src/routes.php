@@ -11,7 +11,7 @@
         $this->get('/login', 	\LoginController::class . ':login');
         $this->post('/login', 	\LoginController::class . ':doLogin');
         $this->any('/logout', 	\LoginController::class . ':logout');
-    })->add( new StubMiddleware() );
+    });
 
     $app->group('', function() {
 		// Главная страница
