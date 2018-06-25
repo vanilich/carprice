@@ -109,14 +109,16 @@
 				    // Парсим цену сайта
                     $price = $priceModel->parse($url, $template);
 
-                    if( !empty($body['template']) ) {
-                        // Обновляем новое значение цены
-                        $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $price, $template);
-                    } else {
-                        $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $price);
-                    }
+                    if($price) {
+                        if( !empty($body['template']) ) {
+                            // Обновляем новое значение цены
+                            $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $url, $price, $template);
+                        } else {
+                            $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $url, $price);
+                        }
 
-                    return $response->withJson( ['price' => $price] );
+                        return $response->withJson( ['price' => $price] );
+                    }
                 } catch(\PriceException $exp) {
 				    // Если такой DOM элемент не найден на странице
 				    if($exp->getLevel() == PriceModel::DOM_ENTITY_NOT_FOUND) {

@@ -158,16 +158,17 @@
          * Установить цену
          * @param $level integer Уровень ошибки. См. const PRICE_xxx...
          * @param $id integer ID цены
+         * @param $url string ссылка на цену
          * @param $price integer Значение цены
-         * @param $tempalate string Шаблон для поиска цены
+         * @param $template string Шаблон для поиска цены
          * @return void
          */
-		public function updatePrice($level, $id, $price = NULL, $template = NULL) {
+		public function updatePrice($level, $id, $url, $price = NULL, $template = NULL) {
 		    if($level === PriceModel::PRICE_SUCCESS) {
 		        if($template != NULL) {
-                    $this->db->query("UPDATE price SET template=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $template, $price, PriceModel::PRICE_SUCCESS, $id);
+                    $this->db->query("UPDATE price SET url=?s, template=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $url, $template, $price, PriceModel::PRICE_SUCCESS, $id);
                 } else {
-                    $this->db->query("UPDATE price SET price=?i, updated_at=NOW(), active=?i WHERE id=?i", $price, PriceModel::PRICE_SUCCESS, $id);
+                    $this->db->query("UPDATE price SET url=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i",  $url, $price, PriceModel::PRICE_SUCCESS, $id);
                 }
             }
 
