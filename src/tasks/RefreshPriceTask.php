@@ -9,6 +9,7 @@ use \Sunra\PhpSimple\HtmlDomParser;
  *      time=false  // Отключить интервал
  *      limit=100   // Лимит записей для обновления
  *      active=2    // Принудительно установить статус поля 'active'
+ *      id=1        // Конкретный id с ценой
  **/
 class RefreshPriceTask extends BaseTask {
 
@@ -65,7 +66,7 @@ class RefreshPriceTask extends BaseTask {
         if( isset($params['active'])  ) {
             $query .= $this->container->db->parse("price.active = ?i AND ", $params['active']);
         } else {
-            $query .= "price.active IN (0, 1) AND ";
+            $query .= "price.active IN (0, 1, 2, 3) AND ";
         }
 
         $query .= "        price.shop_id = shop.id AND ";
@@ -73,6 +74,11 @@ class RefreshPriceTask extends BaseTask {
         // Если передали ID Магазина
         if( isset($params['shop_id']) ) {
             $query .= $this->container->db->parse("price.shop_id = ?i AND ", $params['shop_id']);
+        }
+
+        // Если передали ID Цены
+        if( isset($params['id']) ) {
+            $query .= $this->container->db->parse("price.id = ?i AND ", $params['id']);
         }
 
         // Отключаем проверку по интервалу
