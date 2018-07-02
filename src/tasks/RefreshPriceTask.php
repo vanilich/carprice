@@ -5,11 +5,12 @@ use \Sunra\PhpSimple\HtmlDomParser;
 /**
  * Обновление цен на сайт
  *  Параметры:
- *      shop_id=1   // Id Магазина
- *      time=false  // Отключить интервал
- *      limit=100   // Лимит записей для обновления
- *      active=2    // Принудительно установить статус поля 'active'
- *      id=1        // Конкретный id с ценой
+ *      shop_id=1       // Id Магазина
+ *      time=false      // Отключить интервал
+ *      limit=100       // Лимит записей для обновления
+ *      active=2        // Принудительно установить статус поля 'active'
+ *      id=1            // Конкретный id с ценой
+ *      not_shop_id=12  // Кроме этого магазина
  **/
 class RefreshPriceTask extends BaseTask {
 
@@ -74,6 +75,11 @@ class RefreshPriceTask extends BaseTask {
         // Если передали ID Магазина
         if( isset($params['shop_id']) ) {
             $query .= $this->container->db->parse("price.shop_id = ?i AND ", $params['shop_id']);
+        }
+
+        // Если передали ID НЕ Магазина
+        if( isset($params['not_shop_id']) ) {
+            $query .= $this->container->db->parse("price.shop_id <> ?i AND ", $params['not_shop_id']);
         }
 
         // Если передали ID Цены
