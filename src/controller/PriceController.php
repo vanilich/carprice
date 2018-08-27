@@ -102,12 +102,14 @@
 					$template = $this->container->db->getOne('SELECT shop.template FROM price INNER JOIN shop ON price.id = ?i AND price.shop_id = shop.id LIMIT 1', $id);
 				}
 
+                $useProxy = intval($this->container->db->getOne('SELECT shop.use_proxy FROM price INNER JOIN shop ON price.id = ?i AND price.shop_id = shop.id LIMIT 1', $id));
+
 				// Создаем модель для цены
 				$priceModel = new PriceModel($this->container->db);
 
 				try {
 				    // Парсим цену сайта
-                    $price = $priceModel->parse($url, $template);
+                    $price = $priceModel->parse($url, $template, $useProxy);
 
                     if($price) {
                         if( !empty($body['template']) ) {

@@ -81,16 +81,17 @@
 		/**
 		* Парсим цену с стороннего сайта\
         * @param $url string Ссылка на цену
-        * @param @template string Наблон парсинга цены
+        * @param $template string Наблон парсинга цены
+        * @param $useProxy integer Использовать ли прокси
         * @throws \PriceException Если не удается найти хост, шаблон или цену
         * @return string Значение цены
 		**/
-		public static function parse($url, $template) {
+		public static function parse($url, $template, $useProxy) {
 		    // Константа для класса HtmlDomParser
             @define('MAX_FILE_SIZE', 9999999999);
 
             // Получаем страницу с помощью Curl
-            $page = PriceModel::getWebPage($url);
+            $page = PriceModel::getWebPage($url, $useProxy);
 
 			// Проверяем ссылку на доступность
             if( $page['http_code'] !== 404 AND $page['http_code'] !== 0 ) {
@@ -181,7 +182,7 @@
             }
         }
 
-        public static function getWebPage($url) {
+        public static function getWebPage($url, $useProxy = 0) {
             $user_agent='Mozilla/5.0 (Windows NT 6.1; rv:8.0) Gecko/20100101 Firefox/8.0';
 
             $options = array(
@@ -198,10 +199,17 @@
                 CURLOPT_MAXREDIRS      => 10,
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0
+
             );
 
-            $ch      = curl_init( $url );
+            $ch = curl_init( $url );
+
             curl_setopt_array( $ch, $options );
+
+            if($useProxy === 1) {
+                curl_setopt($ch, CURLOPT_PROXY, getenv('PROXY_URL'));
+            }
+
             $content = curl_exec( $ch );
             $err     = curl_errno( $ch );
             $errmsg  = curl_error( $ch );

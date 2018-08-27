@@ -57,6 +57,7 @@ class RefreshPriceTask extends BaseTask {
         $query .= "    price.url as 'price_url', ";
         $query .= "    shop.url as 'shop_url', ";
         $query .= "    shop.template as 'shop_template', ";
+        $query .= "    shop.use_proxy as 'use_proxy', ";
         $query .= "    price.template as 'price_template', ";
         $query .= "    price.updated_at, ";
         $query .= "    price.price ";
@@ -116,6 +117,8 @@ class RefreshPriceTask extends BaseTask {
             $id = $value['id'];
             // Ссылка на страницу с ценой
             $url = $value['price_url'];
+            // Использовать ли прокси
+            $useProxy = $value['use_proxy'];
             // Если поле template в таблице price не установлено, то берем поле template из соотвественной записи из таблицы shop
             $template = ( isset($value['price_template']) AND !empty($value['price_template']) ) ? $value['price_template'] : $value['shop_template'];
 
@@ -124,7 +127,7 @@ class RefreshPriceTask extends BaseTask {
 
             try {
                 // Парсим цену сайта
-                $price = PriceModel::parse($url, $template);
+                $price = PriceModel::parse($url, $template, $useProxy);
 
                 // Обновляем новое значение цены
                 $priceModel->updatePrice(PriceModel::PRICE_SUCCESS, $id, $url, $price);
