@@ -118,7 +118,7 @@ class RefreshPriceTask extends BaseTask {
             // Ссылка на страницу с ценой
             $url = $value['price_url'];
             // Использовать ли прокси
-            $useProxy = $value['use_proxy'];
+            $useProxy = intval($value['use_proxy']);
             // Если поле template в таблице price не установлено, то берем поле template из соотвественной записи из таблицы shop
             $template = ( isset($value['price_template']) AND !empty($value['price_template']) ) ? $value['price_template'] : $value['shop_template'];
 
