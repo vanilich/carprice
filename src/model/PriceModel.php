@@ -106,6 +106,7 @@
 					if($price) {
                         // Удаляем из цены html тэги и оставляем только цифры
                         $price = strip_tags($price);
+                        $price = str_replace("&#8381;", "", $price);
                         $price = preg_replace("/[^0-9]/", '', $price);
                         $price = str_replace(' ', '', $price);
 
