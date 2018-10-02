@@ -195,8 +195,8 @@
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_ENCODING       => "",
                 CURLOPT_AUTOREFERER    => true,
-                CURLOPT_CONNECTTIMEOUT => 5,
-                CURLOPT_TIMEOUT        => 5,
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT        => 10,
                 CURLOPT_MAXREDIRS      => 10,
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0
