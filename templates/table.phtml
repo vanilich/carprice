@@ -8,7 +8,7 @@
                     <th>Модель</th>
                     <?php foreach($shop as $value) { ?>
                         <th>
-                            <?php echo $value['name']; ?>
+                            <?php echo $value['name']; ?><?php if($value['use_proxy'] == 1) { ?>*<?php } ?>
                         </th>
                     <?php } ?>
                 </tr>

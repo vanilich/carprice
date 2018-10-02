@@ -8,7 +8,7 @@
 		* @return array
 		**/
 		public function getShop(array $shop = [], array $city = []) {
-		    $query = "SELECT id as 'shop_id', name FROM shop WHERE 1";
+		    $query = "SELECT id as 'shop_id', name, use_proxy FROM shop WHERE 1";
 
 		    // Фильтруем данные по "городу" и "автосалону"
 		    if( isset($shop) AND !empty($shop) AND is_array($shop) ) {
