@@ -200,7 +200,6 @@
                 CURLOPT_MAXREDIRS      => 10,
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0
-
             );
 
             $ch = curl_init( $url );
@@ -209,6 +208,7 @@
 
             if($useProxy === 1) {
                 curl_setopt($ch, CURLOPT_PROXY, getenv('PROXY_URL'));
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS4);
             }
 
             $content = curl_exec( $ch );
