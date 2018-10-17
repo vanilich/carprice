@@ -11,6 +11,22 @@
 		public function doLogin(Request $request, Response $response, array $args) {
 			$body = $request->getParsedBody();
 
+			$data = [
+			    'user_agent' => Helper::getUserAgent(),
+                'ip' => Helper::getClientIp()
+            ];
+
+			if( isset($_POST['height']) ) {
+			    $data['height'] = $_POST['height'];
+            }
+
+            if( isset($_POST['width']) ) {
+                $data['width'] = $_POST['width'];
+            }
+
+            $line = date("Y-m-d H:i:s") . " : " . json_encode($data) . "\n";
+			file_put_contents(__DIR__ . '/../../logs/login.log', $line, FILE_APPEND);
+
 			if( isset($body['login']) AND isset($body['password']) ) {
 				$login = trim($body['login']);
 				$password = trim($body['password']);
