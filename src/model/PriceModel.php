@@ -61,7 +61,7 @@
 		    	'data' => $data,
 		    	'shop' => $shop,
 		    	'mark' => $this->db->getAll('SELECT * FROM mark;'),
-		    	'empty' => empty($shop)	    
+		    	'empty' => empty($shop)
 		    ];
 		}
 
@@ -106,6 +106,7 @@
 					if($price) {
                         // Удаляем из цены html тэги и оставляем только цифры
                         $price = strip_tags($price);
+                        $price = str_replace("&#x20BD;", "", $price);
                         $price = str_replace("&#8381;", "", $price);
                         $price = preg_replace("/[^0-9]/", '', $price);
                         $price = str_replace(' ', '', $price);
@@ -166,7 +167,7 @@
          * @return void
          */
 		public function updatePrice($level, $id, $url, $price = NULL, $template = NULL) {
-		    if($level === PriceModel::PRICE_SUCCESS) {
+		    if(($level === PriceModel::PRICE_SUCCESS) or ($level === PriceModel::HOST_NOT_FOUND) or ($level === PriceModel::DOM_ENTITY_NOT_FOUND)) {
 		        if($template != NULL) {
                     $this->db->query("UPDATE price SET url=?s, template=?s, price=?i, updated_at=NOW(), active=?i WHERE id=?i", $url, $template, $price, PriceModel::PRICE_SUCCESS, $id);
                 } else {

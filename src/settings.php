@@ -26,7 +26,7 @@ return [
         ],
 
         'auth' => [
-            'admin' => 'admin',
+            'admin' => '657ght7w35fw6gg620yg',
             'pingvin' => 'wnfnxo65',
             'krolik' => 'ifhqbsta',
             'panda' => 'jyl14aok',
